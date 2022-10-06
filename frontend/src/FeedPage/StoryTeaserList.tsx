@@ -21,7 +21,7 @@ export default function StoryTeaserList({ stories }: StoryTeaserListProps) {
           <Stack orientation={"horizontal"}>
             <div className={"w-24"}>
               <img
-                alt={"Profile image of " + story.writtenBy.user?.name}
+                alt={"Profile image of " + story.writtenBy.user?.fullname}
                 src={story.writtenBy.profileImage}
               />
             </div>
@@ -33,7 +33,7 @@ export default function StoryTeaserList({ stories }: StoryTeaserListProps) {
                   }
                 >
                   <RouterLink to={`/u/${story.writtenBy.id}`}>
-                    {story.writtenBy.user?.name}
+                    {story.writtenBy.user?.fullname}
                   </RouterLink>
                 </span>
 

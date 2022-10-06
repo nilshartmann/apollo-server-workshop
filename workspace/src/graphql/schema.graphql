@@ -43,16 +43,15 @@ type Member {
 type PageResult {
   pageNumber: Int!
   totalCount: Int!
-  totalPageCount: Int!
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
 }
 
 """
-A **StoryConnection** represents a connection in our graph from one
-node to a list of `Story` nodes: `Query --> StoryConnection --> Store`
+A **StoryList** represents a connection in our graph from one
+node to a list of `Story` nodes: `Query --> StoryList --> Story`
 """
-type StoryConnection {
+type StoryList {
   page: PageResult!
 
   stories: [Story!]!
@@ -69,14 +68,20 @@ type Query {
 
   allStories: [Story!]!
 
-  # SCHRITT 2: --------------------------------------------
+  #  # SCHRITT 2: --------------------------------------------
   """
   Returns the requested amount of stories, ordered by date, so
   that newest/latest stories come first
   """
-  stories(page: Int! = 0, pageSize: Int! = 3): StoryConnection!
+  stories(page: Int! = 0, pageSize: Int! = 3): StoryList!
 
   comments(storyId: ID!): [Comment!]!
+
+  """
+  Return the current logged in Member (as read from the `X-Authorization` HTTP-Header) or null
+  if no member is logged in
+  """
+  me: Member
 }
 
 input AddCommentInput {

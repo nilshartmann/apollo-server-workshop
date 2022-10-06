@@ -18,7 +18,7 @@ export default function createMembers(): MemberData[] {
       version: 1,
       created_at: "2019-05-01T21:39:24.849Z",
       user_id: "U1",
-      profile_image: "avatars/nils.jpg",
+      profile_image: "/avatars/nils.jpg",
       location: "Hamburg",
       bio: "Software-Developer from Hamburg",
       skills: "Beer and GraphQL",
@@ -30,7 +30,7 @@ export default function createMembers(): MemberData[] {
       version: 1,
       created_at: "2021-10-08T20:32:15.761Z",
       user_id: "U2",
-      profile_image: "avatars/avatar_U2.png",
+      profile_image: "/avatars/avatar_U2.png",
 
       location: "Longmont, VN",
       bio: "quaerat-nihil-eveniet",
@@ -43,7 +43,7 @@ export default function createMembers(): MemberData[] {
       version: 1,
       created_at: "2020-05-06T03:46:48.899Z",
       user_id: "U3",
-      profile_image: "avatars/avatar_U3.png",
+      profile_image: "/avatars/avatar_U3.png",
 
       location: "Coral Springs, BR",
       bio: null,
@@ -56,7 +56,7 @@ export default function createMembers(): MemberData[] {
       version: 1,
       created_at: "2021-04-27T01:00:24.481Z",
       user_id: "U4",
-      profile_image: "avatars/avatar_U4.png",
+      profile_image: "/avatars/avatar_U4.png",
 
       location: "Seattle, CI",
       bio: null,
@@ -70,7 +70,7 @@ export default function createMembers(): MemberData[] {
       version: 1,
       created_at: "2020-08-28T14:58:47.401Z",
       user_id: "U5",
-      profile_image: "avatars/avatar_U5.png",
+      profile_image: "/avatars/avatar_U5.png",
 
       location: "Carrollton, UM",
       bio: "provident-sunt-minima",

@@ -6,7 +6,7 @@ subscription OnNewComment($storyId: ID!) {
         id
         user {
           id
-          name
+          fullname
         }
         profileImage
       }

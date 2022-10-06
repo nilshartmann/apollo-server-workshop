@@ -13,7 +13,7 @@ export function Comment({ comment }: CommentProps) {
       <div className={"w-8"}>
         <img
           src={comment.writtenBy.profileImage}
-          alt={comment.writtenBy.user?.name || "n/a"}
+          alt={comment.writtenBy.user?.fullname || "n/a"}
         />
       </div>
       <div
@@ -24,7 +24,7 @@ export function Comment({ comment }: CommentProps) {
         <Stack>
           <div>
             <span className={"font-bold text-base mr-2"}>
-              {comment.writtenBy.user?.name || "n/a"}
+              {comment.writtenBy.user?.fullname || "n/a"}
             </span>
             <span className={"font-light"}>
               {formatShortDate(comment.createdAt)}

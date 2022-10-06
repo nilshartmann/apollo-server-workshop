@@ -49,8 +49,12 @@ function UserBadge() {
 
   return (
     <div className={"flex place-items-center"}>
-      <img className={"h-7 pr-2"} src={me.profileImage} alt={me.user?.name} />
-      {me.user?.name}
+      <img
+        className={"h-7 pr-2"}
+        src={me.profileImage}
+        alt={me.user?.fullname}
+      />
+      {me.user?.fullname}
       <LogoutIcon
         className={"h-7 pl-2 hover:cursor-pointer hover:text-orange-500"}
         onClick={() => setToken("")}

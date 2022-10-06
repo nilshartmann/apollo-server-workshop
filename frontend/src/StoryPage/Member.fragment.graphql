@@ -3,6 +3,6 @@ fragment BasicMember on Member {
   profileImage
   user {
     id
-    name
+    fullname
   }
 }

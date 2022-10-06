@@ -50,7 +50,7 @@ export function CommentEditor({ storyId }: CommentEditorProps) {
   return (
     <Stack orientation={"horizontal"}>
       <div className={"w-8"}>
-        {me && <img src={me.profileImage} alt={me.user?.name || "n/a"} />}
+        {me && <img src={me.profileImage} alt={me.user?.fullname || "n/a"} />}
       </div>
       <div
         className={

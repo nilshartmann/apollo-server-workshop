@@ -46,6 +46,23 @@ app.get("/users/:userId", (req, res) => {
   return res.json({ ...user, requestId: `usersById_${usersByIdCounter}` });
 });
 
+app.post("/login", (req, res) => {
+  // interpret token as userid
+  const { username = "", password = "" } = req.body;
+  if (password.length <= 4) {
+    return res.status(404).json({ error: `Invalid password` });
+  }
+  console.log(`Checking username token '${username}'`);
+  const user = users.find(
+    (u) => u.login.toLowerCase() === username.toLowerCase()
+  );
+  if (!user) {
+    return res.status(404).json({ error: `Invalid user '${token}'` });
+  }
+
+  return res.json({ token: user.id });
+});
+
 app.post("/auth", (req, res) => {
   // interpret token as userid
   const token = req.body.token;

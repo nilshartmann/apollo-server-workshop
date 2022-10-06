@@ -125,7 +125,7 @@ function LoginHint() {
 }
 
 function Usernames() {
-  const usernames = ["larkin", "treutel", "purdy"];
+  const usernames = ["larkin", "treutel", "sue"];
 
   return (
     <div className={"mt-1"}>

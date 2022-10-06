@@ -57,7 +57,7 @@ function Author({ story }: SingleStoryProps) {
     <Stack orientation={"horizontal"}>
       <div className={"w-1/12"}>
         <img
-          alt={"Profile image of " + story.writtenBy.user?.name}
+          alt={"Profile image of " + story.writtenBy.user?.fullname}
           src={story.writtenBy.profileImage}
         />
       </div>
@@ -69,7 +69,7 @@ function Author({ story }: SingleStoryProps) {
             }
           >
             <RouterLink to={`/u/${story.writtenBy.id}`}>
-              {story.writtenBy.user?.name}
+              {story.writtenBy.user?.fullname}
             </RouterLink>
           </span>
           <div className={"font-extralight text-xs"}>

@@ -1,6 +1,5 @@
-import * as Apollo from "@apollo/client";
 import { gql } from "@apollo/client";
-
+import * as Apollo from "@apollo/client";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -80,23 +79,25 @@ export type PageResult = {
   hasPreviousPage: Scalars["Boolean"];
   pageNumber: Scalars["Int"];
   totalCount: Scalars["Int"];
-  totalPageCount: Scalars["Int"];
 };
 
 export type Query = {
   __typename?: "Query";
+  allStories: Array<Story>;
   comments: Array<Comment>;
   /**
-   * Return the current logged in Member (as read from the `Authorization` JWT) or null
+   * Return the current logged in Member (as read from the `X-Authorization` HTTP-Header) or null
    * if no member is logged in
    */
   me?: Maybe<Member>;
+  /** Returns `hello` if backend is working */
+  ping: Scalars["String"];
   /**
    * Returns the requested amount of stories, ordered by date, so
    * that newest/latest stories come first
    */
-  stories: StoryConnection;
-  /** Returns the newest `Story` in our backend or null if no Story available */
+  stories: StoryList;
+  /** Returns the given `Story` or null if this Story is not available */
   story?: Maybe<Story>;
 };
 
@@ -110,7 +111,7 @@ export type QueryStoriesArgs = {
 };
 
 export type QueryStoryArgs = {
-  storyId?: InputMaybe<Scalars["ID"]>;
+  storyId: Scalars["ID"];
 };
 
 /** This is a `Story`. */
@@ -131,11 +132,11 @@ export type StoryExcerptArgs = {
 };
 
 /**
- * A **StoryConnection** represents a connection in our graph from one
- * node to a list of `Story` nodes: `Query --> StoryConnection --> Store`
+ * A **StoryList** represents a connection in our graph from one
+ * node to a list of `Story` nodes: `Query --> StoryList --> Story`
  */
-export type StoryConnection = {
-  __typename?: "StoryConnection";
+export type StoryList = {
+  __typename?: "StoryList";
   page: PageResult;
   stories: Array<Story>;
 };
@@ -151,9 +152,9 @@ export type SubscriptionOnNewCommentArgs = {
 
 export type User = {
   __typename?: "User";
-  email: Scalars["String"];
+  fullname: Scalars["String"];
   id: Scalars["ID"];
-  name: Scalars["String"];
+  login: Scalars["String"];
 };
 
 export type StoryTeaserFragment = {
@@ -166,7 +167,7 @@ export type StoryTeaserFragment = {
     __typename?: "Member";
     id: string;
     profileImage: string;
-    user?: { __typename?: "User"; name: string } | null;
+    user?: { __typename?: "User"; fullname: string } | null;
   };
 };
 
@@ -177,7 +178,7 @@ export type FeedPageQueryVariables = Exact<{
 export type FeedPageQuery = {
   __typename?: "Query";
   stories: {
-    __typename?: "StoryConnection";
+    __typename?: "StoryList";
     page: {
       __typename?: "PageResult";
       pageNumber: number;
@@ -193,7 +194,7 @@ export type FeedPageQuery = {
         __typename?: "Member";
         id: string;
         profileImage: string;
-        user?: { __typename?: "User"; name: string } | null;
+        user?: { __typename?: "User"; fullname: string } | null;
       };
     }>;
   };
@@ -233,7 +234,7 @@ export type BasicMemberFragment = {
   __typename?: "Member";
   id: string;
   profileImage: string;
-  user?: { __typename?: "User"; id: string; name: string } | null;
+  user?: { __typename?: "User"; id: string; fullname: string } | null;
 };
 
 export type OnNewCommentSubscriptionVariables = Exact<{
@@ -253,7 +254,7 @@ export type OnNewCommentSubscription = {
         __typename?: "Member";
         id: string;
         profileImage: string;
-        user?: { __typename?: "User"; id: string; name: string } | null;
+        user?: { __typename?: "User"; id: string; fullname: string } | null;
       };
     };
   };
@@ -268,7 +269,7 @@ export type StoryCommentFragment = {
     __typename?: "Member";
     id: string;
     profileImage: string;
-    user?: { __typename?: "User"; id: string; name: string } | null;
+    user?: { __typename?: "User"; id: string; fullname: string } | null;
   };
 };
 
@@ -287,7 +288,7 @@ export type StoryCommentsQuery = {
       __typename?: "Member";
       id: string;
       profileImage: string;
-      user?: { __typename?: "User"; id: string; name: string } | null;
+      user?: { __typename?: "User"; id: string; fullname: string } | null;
     };
   }>;
 };
@@ -309,7 +310,7 @@ export type StoryPageQuery = {
       bio?: string | null;
       id: string;
       profileImage: string;
-      user?: { __typename?: "User"; id: string; name: string } | null;
+      user?: { __typename?: "User"; id: string; fullname: string } | null;
     };
     comments: Array<{
       __typename?: "Comment";
@@ -318,7 +319,7 @@ export type StoryPageQuery = {
       createdAt: string;
       writtenBy: {
         __typename?: "Member";
-        user?: { __typename?: "User"; name: string } | null;
+        user?: { __typename?: "User"; fullname: string } | null;
       };
     }>;
   } | null;
@@ -332,7 +333,7 @@ export type MeQuery = {
     __typename?: "Member";
     id: string;
     profileImage: string;
-    user?: { __typename?: "User"; name: string } | null;
+    user?: { __typename?: "User"; fullname: string } | null;
   } | null;
 };
 
@@ -345,7 +346,7 @@ export const StoryTeaserFragmentDoc = gql`
     writtenBy {
       id
       user {
-        name
+        fullname
       }
       profileImage
     }
@@ -362,7 +363,7 @@ export const BasicMemberFragmentDoc = gql`
     profileImage
     user {
       id
-      name
+      fullname
     }
   }
 `;
@@ -417,7 +418,6 @@ export function useFeedPageQuery(
     options
   );
 }
-
 export function useFeedPageLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
     FeedPageQuery,
@@ -430,7 +430,6 @@ export function useFeedPageLazyQuery(
     options
   );
 }
-
 export type FeedPageQueryHookResult = ReturnType<typeof useFeedPageQuery>;
 export type FeedPageLazyQueryHookResult = ReturnType<
   typeof useFeedPageLazyQuery
@@ -495,7 +494,6 @@ export function useAddCommentMutation(
     options
   );
 }
-
 export type AddCommentMutationHookResult = ReturnType<
   typeof useAddCommentMutation
 >;
@@ -514,7 +512,7 @@ export const OnNewCommentDocument = gql`
           id
           user {
             id
-            name
+            fullname
           }
           profileImage
         }
@@ -553,7 +551,6 @@ export function useOnNewCommentSubscription(
     OnNewCommentSubscriptionVariables
   >(OnNewCommentDocument, options);
 }
-
 export type OnNewCommentSubscriptionHookResult = ReturnType<
   typeof useOnNewCommentSubscription
 >;
@@ -596,7 +593,6 @@ export function useStoryCommentsQuery(
     options
   );
 }
-
 export function useStoryCommentsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
     StoryCommentsQuery,
@@ -609,7 +605,6 @@ export function useStoryCommentsLazyQuery(
     options
   );
 }
-
 export type StoryCommentsQueryHookResult = ReturnType<
   typeof useStoryCommentsQuery
 >;
@@ -637,7 +632,7 @@ export const StoryPageDocument = gql`
         createdAt
         writtenBy {
           user {
-            name
+            fullname
           }
         }
       }
@@ -671,7 +666,6 @@ export function useStoryPageQuery(
     options
   );
 }
-
 export function useStoryPageLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
     StoryPageQuery,
@@ -684,7 +678,6 @@ export function useStoryPageLazyQuery(
     options
   );
 }
-
 export type StoryPageQueryHookResult = ReturnType<typeof useStoryPageQuery>;
 export type StoryPageLazyQueryHookResult = ReturnType<
   typeof useStoryPageLazyQuery
@@ -698,7 +691,7 @@ export const MeDocument = gql`
     me {
       id
       user {
-        name
+        fullname
       }
       profileImage
     }
@@ -726,14 +719,12 @@ export function useMeQuery(
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
 }
-
 export function useMeLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
 }
-
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;

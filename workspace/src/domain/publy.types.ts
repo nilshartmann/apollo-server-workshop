@@ -1,3 +1,5 @@
+import { isNumber } from "util";
+
 export type MemberEntity = {
   id: string;
   version: number;
@@ -35,4 +37,16 @@ export type UserEntity = {
   id: string;
   name: string;
   email: string;
+};
+
+export type StoryEntityList = {
+  page: Page;
+  stories: StoryEntity[];
+};
+
+export type Page = {
+  pageNumber: number;
+  totalCount: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 };

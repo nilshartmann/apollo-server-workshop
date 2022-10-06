@@ -17,7 +17,7 @@ query StoryPage($storyId: ID!) {
       createdAt
       writtenBy {
         user {
-          name
+          fullname
         }
       }
     }

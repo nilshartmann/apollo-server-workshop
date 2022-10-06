@@ -2,6 +2,7 @@ import { Resolvers } from "./generated/graphql-types";
 import publyRepository, {
   InvalidDataError,
 } from "../domain/PublyDomainService";
+import publyDomainService from "../domain/PublyDomainService";
 export const resolvers: Resolvers = {
   Query: {
     ping() {
@@ -12,6 +13,19 @@ export const resolvers: Resolvers = {
     },
     allStories() {
       return publyRepository.findAllStories();
+    },
+    // frontend-only ------------------------------------------------------------
+    stories(_, { page, pageSize }) {
+      return publyRepository.findStories(page, pageSize);
+    },
+    me(_, __, { userId }) {
+      if (!userId) {
+        return null;
+      }
+      return publyDomainService.getMemberByUserId(userId);
+    },
+    comments(_, { storyId }) {
+      return publyDomainService.findAllCommentsByStoryId(storyId);
     },
   },
   Story: {

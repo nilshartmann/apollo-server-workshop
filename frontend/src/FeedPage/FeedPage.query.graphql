@@ -6,7 +6,7 @@ fragment StoryTeaser on Story {
   writtenBy {
     id
     user {
-      name
+      fullname
     }
     profileImage
   }

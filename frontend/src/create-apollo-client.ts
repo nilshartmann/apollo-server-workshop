@@ -11,7 +11,7 @@ import { createClient } from "graphql-ws";
 import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
 import { getMainDefinition } from "@apollo/client/utilities";
-import { StoryConnection } from "./generated/graphql";
+import { StoryList } from "./generated/graphql";
 
 export function createApolloClient() {
   const httpLink = createHttpLink({
@@ -61,7 +61,7 @@ export function createApolloClient() {
     return {
       headers: {
         ...headers,
-        Authorization: `Bearer ${token}`,
+        "X-Authorization": token,
       },
     };
   });
@@ -75,8 +75,8 @@ export function createApolloClient() {
             stories: {
               keyArgs: false,
               merge(
-                existing: StoryConnection | undefined | null,
-                incoming: StoryConnection
+                existing: StoryList | undefined | null,
+                incoming: StoryList
               ) {
                 if (!existing) {
                   return incoming;
