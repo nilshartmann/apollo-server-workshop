@@ -1,7 +1,7 @@
 import { CommentEntity, MemberEntity, StoryEntity } from "./publy.types";
 import createFakeData from "./data/fake-data";
 
-export default class PublyRepository {
+export class PublyRepository {
   private data = createFakeData();
 
   findAllStories(): StoryEntity[] {
@@ -45,6 +45,9 @@ export default class PublyRepository {
     };
   }
 }
+
+const repository = new PublyRepository();
+export default repository;
 
 //
 // memberRepository.findByUserId

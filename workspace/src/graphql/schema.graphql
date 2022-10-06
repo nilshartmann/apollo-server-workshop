@@ -24,8 +24,8 @@ type Comment {
 
 type User {
   id: ID!
-  name: String!
-  email: String!
+  fullname: String!
+  login: String!
 }
 
 type Member {
@@ -59,9 +59,17 @@ type StoryConnection {
 }
 
 type Query {
-  "Returns the newest `Story` in our backend or null if no Story available"
-  story(storyId: ID): Story
+  """
+  Returns `hello` if backend is working
+  """
+  ping: String!
 
+  "Returns the given `Story` or null if this Story is not available"
+  story(storyId: ID!): Story
+
+  allStories: [Story!]!
+
+  # SCHRITT 2: --------------------------------------------
   """
   Returns the requested amount of stories, ordered by date, so
   that newest/latest stories come first

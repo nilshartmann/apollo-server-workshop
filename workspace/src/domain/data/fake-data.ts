@@ -33,7 +33,7 @@ export default function createFakeData(): FakeData {
       writtenBy: getMemberEntity(data.written_by_id),
       title: data.title,
       tags: data.tags,
-      bodyMarkdown: data.body_markdown,
+      body: data.body_markdown,
       comments: [],
     };
 

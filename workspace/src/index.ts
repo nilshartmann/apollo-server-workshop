@@ -7,10 +7,17 @@ import express from "express";
 import http from "http";
 import { readFileSync } from "fs";
 
-import { Resolvers } from "./generated/graphql";
+import { Resolvers } from "./graphql/generated/graphql-types";
 import PublyRepository from "./domain/PublyRepository";
+import path from "path";
+import { resolvers } from "./graphql/resolvers";
+import { publyBaseContext, publyDataSources } from "./graphql/publy-context";
+import UserServiceDataSource from "./graphql/UserServiceDataSource";
 
-const schema = readFileSync("./src/schema.graphql", "utf8");
+const schema = readFileSync(
+  path.resolve(__dirname, "graphql/schema.graphql"),
+  "utf8"
+);
 
 async function startApolloServer(typeDefs: string, resolvers: Resolvers) {
   // Required logic for integrating with Express
@@ -25,6 +32,8 @@ async function startApolloServer(typeDefs: string, resolvers: Resolvers) {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    context: publyBaseContext,
+    dataSources: publyDataSources,
     csrfPrevention: true,
     cache: "bounded",
     plugins: [
@@ -51,4 +60,4 @@ async function startApolloServer(typeDefs: string, resolvers: Resolvers) {
   console.log(`Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 
-const p = new PublyRepository();
+startApolloServer(schema, resolvers);

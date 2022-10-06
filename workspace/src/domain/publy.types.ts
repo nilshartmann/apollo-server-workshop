@@ -1,5 +1,3 @@
-import { CommentData } from "./data/comments";
-
 export type MemberEntity = {
   id: string;
   version: number;
@@ -20,7 +18,7 @@ export type StoryEntity = {
   writtenBy: MemberEntity;
   title: string;
   tags: string[];
-  bodyMarkdown: string | null;
+  body: string;
   comments: CommentEntity[];
 };
 
@@ -31,4 +29,10 @@ export type CommentEntity = {
   story: StoryEntity;
   writtenBy: MemberEntity;
   content: string;
+};
+
+export type UserEntity = {
+  id: string;
+  name: string;
+  email: string;
 };

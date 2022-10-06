@@ -5,7 +5,7 @@ export type StoryData = {
   written_by_id: string;
   title: string;
   tags: string[];
-  body_markdown: string | null;
+  body_markdown: string;
 };
 export default function createStories(): StoryData[] {
   return [
