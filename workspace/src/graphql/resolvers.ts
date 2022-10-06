@@ -1,5 +1,7 @@
 import { Resolvers } from "./generated/graphql-types";
-import publyRepository from "../domain/PublyRepository";
+import publyRepository, {
+  InvalidDataError,
+} from "../domain/PublyDomainService";
 export const resolvers: Resolvers = {
   Query: {
     ping() {
@@ -22,6 +24,36 @@ export const resolvers: Resolvers = {
       return context.dataSources.userServiceDataSource.findUserById(
         memberEntity.userId
       );
+    },
+  },
+  Mutation: {
+    addComment(_, { input }, { userId }) {
+      if (!userId) {
+        throw new Error("Please login!");
+      }
+      try {
+        const newComment = publyRepository.addComment(
+          input.storyId,
+          userId,
+          input.content
+        );
+        return { newComment };
+      } catch (err) {
+        if (err instanceof InvalidDataError) {
+          return {
+            errorMsg: err.message,
+          };
+        }
+        throw err;
+      }
+    },
+  },
+  AddCommentPayload: {
+    __resolveType(x) {
+      if ("newComment" in x) {
+        return "AddCommentSuccessPayload";
+      }
+      return "AddCommentFailedPayload";
     },
   },
 };

@@ -8,10 +8,13 @@ import http from "http";
 import { readFileSync } from "fs";
 
 import { Resolvers } from "./graphql/generated/graphql-types";
-import PublyRepository from "./domain/PublyRepository";
+import PublyRepository from "./domain/PublyDomainService";
 import path from "path";
 import { resolvers } from "./graphql/resolvers";
-import { publyBaseContext, publyDataSources } from "./graphql/publy-context";
+import {
+  createPublyContext,
+  createPublyDataSources,
+} from "./graphql/publy-context";
 import UserServiceDataSource from "./graphql/UserServiceDataSource";
 
 const schema = readFileSync(
@@ -22,6 +25,7 @@ const schema = readFileSync(
 async function startApolloServer(typeDefs: string, resolvers: Resolvers) {
   // Required logic for integrating with Express
   const app = express();
+
   // Our httpServer handles incoming requests to our Express app.
   // Below, we tell Apollo Server to "drain" this httpServer,
   // enabling our servers to shut down gracefully.
@@ -32,8 +36,8 @@ async function startApolloServer(typeDefs: string, resolvers: Resolvers) {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: publyBaseContext,
-    dataSources: publyDataSources,
+    context: createPublyContext,
+    dataSources: createPublyDataSources,
     csrfPrevention: true,
     cache: "bounded",
     plugins: [

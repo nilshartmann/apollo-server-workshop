@@ -10,7 +10,7 @@ export type CommentData = {
 export default function createComments(): CommentData[] {
   return [
     {
-      id: "2",
+      id: "1",
       version: 1,
       created_at: "2021-10-10T05:53:21.912Z",
       story_id: "2",

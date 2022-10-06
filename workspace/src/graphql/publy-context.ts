@@ -1,24 +1,33 @@
-import publyRepository, { PublyRepository } from "../domain/PublyRepository";
+import publyRepository, {
+  PublyDomainService,
+} from "../domain/PublyDomainService";
 import UserServiceDataSource from "./UserServiceDataSource";
+import { ContextFunction } from "apollo-server-core/src/types";
+import { ExpressContext } from "apollo-server-express/src/ApolloServer";
 
 type PublyDataSources = {
   userServiceDataSource: UserServiceDataSource;
 };
 
-export function publyDataSources(): PublyDataSources {
+export function createPublyDataSources(): PublyDataSources {
   return {
     userServiceDataSource: new UserServiceDataSource(),
   };
 }
 
 export type PublyBaseContext = {
-  publyRepository: PublyRepository;
+  userId: string | null;
 };
 
 export type PublyContext = PublyBaseContext & {
   dataSources: PublyDataSources;
 };
 
-export const publyBaseContext: PublyBaseContext = {
-  publyRepository,
+export const createPublyContext: ContextFunction<
+  ExpressContext,
+  PublyBaseContext
+> = (config) => {
+  const userId = config.req.get("X-Authorization") || null;
+
+  return { userId };
 };

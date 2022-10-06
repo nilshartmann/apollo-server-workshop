@@ -77,12 +77,6 @@ type Query {
   stories(page: Int! = 0, pageSize: Int! = 3): StoryConnection!
 
   comments(storyId: ID!): [Comment!]!
-
-  """
-  Return the current logged in Member (as read from the `Authorization` JWT) or null
-  if no member is logged in
-  """
-  me: Member
 }
 
 input AddCommentInput {

@@ -81,11 +81,6 @@ export type Query = {
   __typename?: 'Query';
   allStories: Array<Story>;
   comments: Array<Comment>;
-  /**
-   * Return the current logged in Member (as read from the `Authorization` JWT) or null
-   * if no member is logged in
-   */
-  me?: Maybe<Member>;
   /** Returns `hello` if backend is working */
   ping: Scalars['String'];
   /**
@@ -322,7 +317,6 @@ export type PageResultResolvers<ContextType = PublyContext, ParentType extends R
 export type QueryResolvers<ContextType = PublyContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   allStories?: Resolver<Array<ResolversTypes['Story']>, ParentType, ContextType>;
   comments?: Resolver<Array<ResolversTypes['Comment']>, ParentType, ContextType, RequireFields<QueryCommentsArgs, 'storyId'>>;
-  me?: Resolver<Maybe<ResolversTypes['Member']>, ParentType, ContextType>;
   ping?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   stories?: Resolver<ResolversTypes['StoryConnection'], ParentType, ContextType, RequireFields<QueryStoriesArgs, 'page' | 'pageSize'>>;
   story?: Resolver<Maybe<ResolversTypes['Story']>, ParentType, ContextType, RequireFields<QueryStoryArgs, 'storyId'>>;
