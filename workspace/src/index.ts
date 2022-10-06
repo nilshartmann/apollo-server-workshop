@@ -1,12 +1,18 @@
-import { ApolloServer, gql } from 'apollo-server-express';
+import { ApolloServer } from "apollo-server-express";
 import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageLocalDefault,
-} from 'apollo-server-core';
-import express from 'express';
-import http from 'http';
+} from "apollo-server-core";
+import express from "express";
+import http from "http";
+import { readFileSync } from "fs";
 
-async function startApolloServer(typeDefs, resolvers) {
+import { Resolvers } from "./generated/graphql";
+import PublyRepository from "./domain/PublyRepository";
+
+const schema = readFileSync("./src/schema.graphql", "utf8");
+
+async function startApolloServer(typeDefs: string, resolvers: Resolvers) {
   // Required logic for integrating with Express
   const app = express();
   // Our httpServer handles incoming requests to our Express app.
@@ -20,7 +26,7 @@ async function startApolloServer(typeDefs, resolvers) {
     typeDefs,
     resolvers,
     csrfPrevention: true,
-    cache: 'bounded',
+    cache: "bounded",
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
       ApolloServerPluginLandingPageLocalDefault({ embed: true }),
@@ -35,24 +41,14 @@ async function startApolloServer(typeDefs, resolvers) {
     // By default, apollo-server hosts its GraphQL endpoint at the
     // server root. However, *other* Apollo Server packages host it at
     // /graphql. Optionally provide this to match apollo-server.
-    path: '/',
+    path: "/",
   });
 
   // Modified server startup
-  await new Promise(resolve => httpServer.listen({ port: 4000 }, resolve));
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+  await new Promise<void>((resolve) =>
+    httpServer.listen({ port: 4000 }, resolve)
+  );
+  console.log(`Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 
-const typedefs = gql`
-type Query {
-    ping: String!
-}
-`
-
-const resolvers = {
-  Query: {
-    ping: () => `Hello World!`
-  }
-}
-
-startApolloServer(typedefs, resolvers);
+const p = new PublyRepository();

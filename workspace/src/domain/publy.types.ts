@@ -1,0 +1,34 @@
+import {CommentData} from "./data/comments";
+
+export type MemberEntity = {
+	id: string;
+	version: number;
+	createdAt: string;
+	userId: string;
+	profileImage: string;
+	location: string | null;
+	bio: string | null;
+	skills: string | null;
+	currentlyLearning: string | null;
+	works: string | null;
+};
+
+export type StoryEntity = {
+	id: string;
+	version: number;
+	createdAt: string;
+	writtenBy: MemberEntity;
+	title: string;
+	tags: string[];
+	bodyMarkdown: string | null;
+	comments: CommentEntity[]
+}
+
+export type CommentEntity = {
+	id: string;
+	version: number;
+	createdAt: string;
+	story: StoryEntity;
+	writtenBy: MemberEntity;
+	content: string;
+};
