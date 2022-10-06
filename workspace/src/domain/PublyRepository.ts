@@ -30,24 +30,25 @@ export default class PublyRepository {
       throw new Error("Member not found: " + memberId);
     }
     return result;
-	}
+  }
 
-	findMemberByUserId(userId: string): MemberEntity | null {
-		const member = Object.values(this.data.members).find(x => x.userId === userId) || null;
-		return member;
-	}
+  findMemberByUserId(userId: string): MemberEntity | null {
+    const member =
+      Object.values(this.data.members).find((x) => x.userId === userId) || null;
+    return member;
+  }
 
-	saveComment(newEntity: CommentEntity) {
-		this.data.comments = {
-			...this.data.comments,
-			[newEntity.id]: newEntity
-		};
-	}
+  saveComment(newEntity: CommentEntity) {
+    this.data.comments = {
+      ...this.data.comments,
+      [newEntity.id]: newEntity,
+    };
+  }
 }
 
-  //
-  // memberRepository.findByUserId
-  //
-  // memberRepository.findById
-  //
-  // commentRepository.save(comment)
+//
+// memberRepository.findByUserId
+//
+// memberRepository.findById
+//
+// commentRepository.save(comment)

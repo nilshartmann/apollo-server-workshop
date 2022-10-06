@@ -7,7 +7,9 @@
     "dev": "ts-node-dev --exit-child --respawn src/index.ts",
     "start": "ts-node src/index.ts",
     "build": "tsc",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "codegen": "graphql-codegen --config codegen.yml && prettier --write src/generated/**",
+    "codegen:watch": "graphql-codegen --config codegen.yml --watch src/**/*.graphql",
+    "prettier:check": "prettier --check src"
   },
   "keywords": [],
   "author": "",

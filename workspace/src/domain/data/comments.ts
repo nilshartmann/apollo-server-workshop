@@ -8,15 +8,14 @@ export type CommentData = {
 };
 
 export default function createComments(): CommentData[] {
-	return [
-		{
-			id: "2",
-			version: 1,
-			created_at: "2021-10-10T05:53:21.912Z",
-			story_id: "2",
-			written_by_id: "4",
-			content: "Maiores autem adipisci.",
-		},
-	];
+  return [
+    {
+      id: "2",
+      version: 1,
+      created_at: "2021-10-10T05:53:21.912Z",
+      story_id: "2",
+      written_by_id: "4",
+      content: "Maiores autem adipisci.",
+    },
+  ];
 }
-
