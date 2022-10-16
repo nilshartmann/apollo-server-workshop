@@ -50,3 +50,7 @@ export type Page = {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
 };
+
+export type NewCommentEntityEvent = {
+  newComment: CommentEntity;
+};

@@ -1,10 +1,13 @@
 import {
   CommentEntity,
   MemberEntity,
+  NewCommentEntityEvent,
   StoryEntity,
   StoryEntityList,
 } from "./publy.types";
 import createFakeData from "./data/fake-data";
+import { PubSub } from "graphql-subscriptions";
+import { PubSubAsyncIterator } from "graphql-subscriptions/dist/pubsub-async-iterator";
 
 type StorySortCriteria = {
   field: "title" | "date";
@@ -18,6 +21,7 @@ const defaultStorySortCriteria: StorySortCriteria = {
 
 export class PublyDomainService {
   private data = createFakeData();
+  private pubSub = new PubSub();
 
   findAllStories(): StoryEntity[] {
     return Object.values(this.data.stories).sort((s1, s2) =>
@@ -114,12 +118,17 @@ export class PublyDomainService {
     };
     story.comments = [newComment, ...story.comments];
 
+    this.pubSub.publish("COMMENT_ADDED", { onNewComment: { newComment } });
+
     return newComment;
+  }
+
+  getCommentSubscription() {
+    return this.pubSub.asyncIterator("COMMENT_ADDED");
   }
 }
 
-const repository = new PublyDomainService();
-export default repository;
+export const publyDomainService = new PublyDomainService();
 
 export class InvalidDataError extends Error {
   constructor(message: string) {

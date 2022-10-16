@@ -1,22 +1,24 @@
 import { Resolvers } from "./generated/graphql-types";
-import publyRepository, {
+import {
   InvalidDataError,
+  publyDomainService,
 } from "../domain/PublyDomainService";
-import publyDomainService from "../domain/PublyDomainService";
+import { withFilter } from "graphql-subscriptions";
+
 export const resolvers: Resolvers = {
   Query: {
     ping() {
       return "hello";
     },
     story(_, { storyId }) {
-      return publyRepository.findStoryById(storyId);
+      return publyDomainService.findStoryById(storyId);
     },
     allStories() {
-      return publyRepository.findAllStories();
+      return publyDomainService.findAllStories();
     },
     // frontend-only ------------------------------------------------------------
     stories(_, { page, pageSize, sortBy }) {
-      return publyRepository.findStories(page, pageSize, sortBy);
+      return publyDomainService.findStories(page, pageSize, sortBy);
     },
     me(_, __, { userId }) {
       if (!userId) {
@@ -46,7 +48,7 @@ export const resolvers: Resolvers = {
         throw new Error("Please login!");
       }
       try {
-        const newComment = publyRepository.addComment(
+        const newComment = publyDomainService.addComment(
           input.storyId,
           userId,
           input.content
@@ -62,6 +64,26 @@ export const resolvers: Resolvers = {
       }
     },
   },
+  Subscription: {
+    onNewComment: {
+      subscribe: withFilter(
+        () => {
+          const r = publyDomainService.getCommentSubscription();
+          console.log("R", r);
+          return r;
+        },
+        (payload, variables) => {
+          console.log("EVENT", payload);
+          console.log("VARIABLES", variables);
+          return (
+            payload?.onNewComment?.newComment?.story?.id === variables.storyId
+          );
+        }
+        // TS Types sind fehlerhaft in pubsub
+      ) as any,
+    },
+  },
+
   AddCommentPayload: {
     __resolveType(x) {
       if ("newComment" in x) {
