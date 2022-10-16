@@ -63,6 +63,7 @@ export type Member = {
   bio?: Maybe<Scalars["String"]>;
   id: Scalars["ID"];
   profileImage: Scalars["String"];
+  skills?: Maybe<Scalars["String"]>;
   stories: Array<Story>;
   user?: Maybe<User>;
 };
@@ -425,6 +426,7 @@ export type MemberResolvers<
   bio?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   profileImage?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  skills?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   stories?: Resolver<Array<ResolversTypes["Story"]>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

@@ -67,19 +67,10 @@ export const resolvers: Resolvers = {
   Subscription: {
     onNewComment: {
       subscribe: withFilter(
-        () => {
-          const r = publyDomainService.getCommentSubscription();
-          console.log("R", r);
-          return r;
-        },
+        () => publyDomainService.getCommentSubscription(),
         (payload, variables) => {
-          console.log("EVENT", payload);
-          console.log("VARIABLES", variables);
-          return (
-            payload?.onNewComment?.newComment?.story?.id === variables.storyId
-          );
+          return variables.storyId === payload.onNewComment.newComment.story.id;
         }
-        // TS Types sind fehlerhaft in pubsub
       ) as any,
     },
   },

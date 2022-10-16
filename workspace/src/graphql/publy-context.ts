@@ -9,6 +9,17 @@ export type PublyContext = {
   };
 };
 
+export function createSubscriptionContext(): PublyContext {
+  const context: PublyContext = {
+    userId: null,
+    dataSources: {
+      userServiceDataSource: new UserServiceDataSource(),
+    },
+  };
+
+  return context;
+}
+
 export const createPublyContext: ContextFunction<
   [ExpressContextFunctionArgument],
   PublyContext

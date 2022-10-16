@@ -10,7 +10,7 @@ const userserviceHost = window.__publy__userservice_host__.replace(
 export const userServiceUrl = `${userserviceHost}`;
 export const graphqlApiUrl = `${backendHost}`;
 
-export const graphqlWsApiUrl = `${backendHost}/graphql`
+export const graphqlWsApiUrl = `${backendHost}`
   .replaceAll("https", "wss")
   .replace("http", "ws");
 

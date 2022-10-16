@@ -4,3 +4,5 @@ code/**/package.json
 !code/js-intro/**/package.json
 .idea/
 .agenda/
+
+workspace/dist/
