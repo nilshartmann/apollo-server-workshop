@@ -100,10 +100,7 @@ export type Query = {
   me?: Maybe<Member>;
   /** Returns `hello` if backend is working */
   ping: Scalars["String"];
-  /**
-   * Returns the requested amount of stories, ordered by date, so
-   * that newest/latest stories come first
-   */
+  /** Returns the requested amount of stories */
   stories: StoryList;
   /** Returns the given `Story` or null if this Story is not available */
   story?: Maybe<Story>;
@@ -116,11 +113,17 @@ export type QueryCommentsArgs = {
 export type QueryStoriesArgs = {
   page?: Scalars["Int"];
   pageSize?: Scalars["Int"];
+  sortBy?: InputMaybe<StorySortCriteria>;
 };
 
 export type QueryStoryArgs = {
   storyId: Scalars["ID"];
 };
+
+export enum SortDirection {
+  Asc = "asc",
+  Desc = "desc",
+}
 
 /** This is a `Story`. */
 export type Story = {
@@ -148,6 +151,16 @@ export type StoryList = {
   page: PageResult;
   stories: Array<Story>;
 };
+
+export type StorySortCriteria = {
+  direction: SortDirection;
+  field: StorySortField;
+};
+
+export enum StorySortField {
+  Date = "date",
+  Title = "title",
+}
 
 export type Subscription = {
   __typename?: "Subscription";
@@ -309,12 +322,15 @@ export type ResolversTypes = {
   >;
   PageResult: ResolverTypeWrapper<Partial<PageResult>>;
   Query: ResolverTypeWrapper<{}>;
+  SortDirection: ResolverTypeWrapper<Partial<SortDirection>>;
   Story: ResolverTypeWrapper<StoryEntity>;
   StoryList: ResolverTypeWrapper<
     Partial<
       Omit<StoryList, "stories"> & { stories: Array<ResolversTypes["Story"]> }
     >
   >;
+  StorySortCriteria: ResolverTypeWrapper<Partial<StorySortCriteria>>;
+  StorySortField: ResolverTypeWrapper<Partial<StorySortField>>;
   String: ResolverTypeWrapper<Partial<Scalars["String"]>>;
   Subscription: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<UserEntity>;
@@ -357,6 +373,7 @@ export type ResolversParentTypes = {
       stories: Array<ResolversParentTypes["Story"]>;
     }
   >;
+  StorySortCriteria: Partial<StorySortCriteria>;
   String: Partial<Scalars["String"]>;
   Subscription: {};
   User: UserEntity;

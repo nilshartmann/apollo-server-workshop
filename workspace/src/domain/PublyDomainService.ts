@@ -6,15 +6,34 @@ import {
 } from "./publy.types";
 import createFakeData from "./data/fake-data";
 
+type StorySortCriteria = {
+  field: "title" | "date";
+  direction: "asc" | "desc";
+};
+
+const defaultStorySortCriteria: StorySortCriteria = {
+  field: "date",
+  direction: "asc",
+};
+
 export class PublyDomainService {
   private data = createFakeData();
 
   findAllStories(): StoryEntity[] {
-    return Object.values(this.data.stories).sort(sortByDate);
+    return Object.values(this.data.stories).sort((s1, s2) =>
+      sortStoryBy(s1, s2, defaultStorySortCriteria)
+    );
   }
 
-  findStories(page: number, size: number): StoryEntityList {
-    const orderedStories = Object.values(this.data.stories).sort(sortByDate);
+  findStories(
+    page: number,
+    size: number,
+    sortBy?: StorySortCriteria | null
+  ): StoryEntityList {
+    const sortCriteria = sortBy || defaultStorySortCriteria;
+    const orderedStories = Object.values(this.data.stories).sort((a, b) =>
+      sortStoryBy(a, b, sortCriteria)
+    );
 
     const result = orderedStories.slice(page * size, page * size + size);
 
@@ -109,13 +128,28 @@ export class InvalidDataError extends Error {
   }
 }
 
+function sortStoryBy(
+  story1: StoryEntity,
+  story2: StoryEntity,
+  criteria: StorySortCriteria
+) {
+  const s1 = criteria.direction === "asc" ? story1 : story2;
+  const s2 = criteria.direction === "asc" ? story2 : story1;
+
+  if (criteria.field === "date") {
+    return new Date(s1.createdAt).getTime() - new Date(s2.createdAt).getTime();
+  }
+
+  return s1.title.localeCompare(s2.title);
+}
+
 //
 // memberRepository.findByUserId
 //
 // memberRepository.findById
 //
 // commentRepository.save(comment)
-
-function sortByDate(a: StoryEntity, b: StoryEntity) {
-  return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-}
+//
+// function sortByDate(a: StoryEntity, b: StoryEntity) {
+//   return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+// }

@@ -15,8 +15,8 @@ export const resolvers: Resolvers = {
       return publyRepository.findAllStories();
     },
     // frontend-only ------------------------------------------------------------
-    stories(_, { page, pageSize }) {
-      return publyRepository.findStories(page, pageSize);
+    stories(_, { page, pageSize, sortBy }) {
+      return publyRepository.findStories(page, pageSize, sortBy);
     },
     me(_, __, { userId }) {
       if (!userId) {

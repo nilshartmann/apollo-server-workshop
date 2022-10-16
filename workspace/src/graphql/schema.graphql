@@ -36,6 +36,7 @@ type Member {
   Short biography of a member. Optional.
   """
   bio: String
+  skills: String
   user: User
   stories: [Story!]!
 }
@@ -57,6 +58,21 @@ type StoryList {
   stories: [Story!]!
 }
 
+enum SortDirection {
+  asc
+  desc
+}
+
+enum StorySortField {
+  title
+  date
+}
+
+input StorySortCriteria {
+  field: StorySortField!
+  direction: SortDirection!
+}
+
 type Query {
   """
   Returns `hello` if backend is working
@@ -70,10 +86,13 @@ type Query {
 
   #  # SCHRITT 2: --------------------------------------------
   """
-  Returns the requested amount of stories, ordered by date, so
-  that newest/latest stories come first
+  Returns the requested amount of stories
   """
-  stories(page: Int! = 0, pageSize: Int! = 3): StoryList!
+  stories(
+    page: Int! = 0
+    pageSize: Int! = 3
+    sortBy: StorySortCriteria
+  ): StoryList!
 
   comments(storyId: ID!): [Comment!]!
 

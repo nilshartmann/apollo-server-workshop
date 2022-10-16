@@ -15,7 +15,7 @@ export default function createStories(): StoryData[] {
       created_at: "2021-10-09T04:40:50.027Z",
       written_by_id: "1",
 
-      title: "Story 1",
+      title: "Authentication and Access Control with Relay",
       tags: ["java", "string"],
 
       body_markdown:
@@ -27,7 +27,7 @@ export default function createStories(): StoryData[] {
       created_at: "2021-10-10T04:40:50.027Z",
       written_by_id: "1",
 
-      title: "Story 2",
+      title: "How do I call one constructor from another in Java?",
       tags: ["java", "string"],
 
       body_markdown: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
@@ -38,7 +38,7 @@ export default function createStories(): StoryData[] {
       created_at: "2021-10-11T04:40:50.027Z",
       written_by_id: "2",
 
-      title: "Story 3",
+      title: "What is JSONP, and why was it created?",
       tags: ["java", "string"],
 
       body_markdown:
@@ -50,7 +50,7 @@ export default function createStories(): StoryData[] {
       created_at: "2021-10-12T04:40:50.027Z",
       written_by_id: "3",
 
-      title: "Story 4",
+      title: "Get Original Field Name on GraphQL",
       tags: ["java", "string"],
 
       body_markdown:
@@ -62,7 +62,7 @@ export default function createStories(): StoryData[] {
       created_at: "2021-10-13T04:40:50.027Z",
       written_by_id: "2",
 
-      title: "Story 5",
+      title: "How can I get the data-id attribute?",
       tags: ["java", "string"],
 
       body_markdown:
@@ -74,7 +74,7 @@ export default function createStories(): StoryData[] {
       created_at: "2021-10-14T04:40:50.027Z",
       written_by_id: "1",
 
-      title: "Story 6",
+      title: "How to send HTTP request in Node",
       tags: ["java", "string"],
 
       body_markdown:
@@ -86,7 +86,8 @@ export default function createStories(): StoryData[] {
       created_at: "2021-10-15T04:40:50.027Z",
       written_by_id: "4",
 
-      title: "Story 7",
+      title:
+        "What is the difference between a static and a non-static initialization code block",
       tags: ["java", "string"],
 
       body_markdown:
@@ -98,7 +99,7 @@ export default function createStories(): StoryData[] {
       created_at: "2021-10-16T04:40:50.027Z",
       written_by_id: "3",
 
-      title: "Story 8",
+      title: "Remove properties from objects (JavaScript)",
       tags: ["java", "string"],
 
       body_markdown:
@@ -110,7 +111,7 @@ export default function createStories(): StoryData[] {
       created_at: "2021-10-17T04:40:50.027Z",
       written_by_id: "3",
 
-      title: "Story 9",
+      title: "Differences between String.slice and String.substring",
       tags: ["java", "string"],
 
       body_markdown:
@@ -122,7 +123,7 @@ export default function createStories(): StoryData[] {
       created_at: "2021-10-18T04:40:50.027Z",
       written_by_id: "2",
 
-      title: "Story 10",
+      title: "How does GraphQL support AND-OR query conditions?",
       tags: ["java", "string"],
 
       body_markdown:

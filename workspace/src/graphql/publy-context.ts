@@ -1,6 +1,3 @@
-import publyRepository, {
-  PublyDomainService,
-} from "../domain/PublyDomainService";
 import UserServiceDataSource from "./UserServiceDataSource";
 import { ContextFunction } from "apollo-server-core/src/types";
 import { ExpressContext } from "apollo-server-express/src/ApolloServer";
