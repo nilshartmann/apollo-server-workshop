@@ -30,7 +30,7 @@ app.get("/users", (_, res) => {
 app.get("/users/:userId", (req, res) => {
   ++usersByIdCounter;
   console.log(
-    `READING USER WITH ID '${req.params.userId}' (REQUEST-ID: ${usersByIdCounter})`
+    `READING USER WITH ID '${req.params.userId}' (REQUEST-ID: ${usersByIdCounter}) useCaching: ${useCaching}`
   );
 
   const user = users.find((u) => u.id === req.params.userId);

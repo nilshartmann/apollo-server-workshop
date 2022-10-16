@@ -1,6 +1,7 @@
 import UserServiceDataSource from "./UserServiceDataSource";
 import { ContextFunction } from "@apollo/server";
 import { ExpressContextFunctionArgument } from "@apollo/server/express4";
+import { KeyValueCache } from "@apollo/utils.keyvaluecache";
 
 export type PublyContext = {
   userId: string | null;
@@ -20,18 +21,18 @@ export function createSubscriptionContext(): PublyContext {
   return context;
 }
 
-export const createPublyContext: ContextFunction<
-  [ExpressContextFunctionArgument],
-  PublyContext
-> = async (config) => {
+export async function createPublyContext(
+  config: ExpressContextFunctionArgument,
+  cache: KeyValueCache<string>
+): Promise<PublyContext> {
   const userId = config.req.get("X-Authorization") || null;
 
   const context: PublyContext = {
     userId,
     dataSources: {
-      userServiceDataSource: new UserServiceDataSource(),
+      userServiceDataSource: new UserServiceDataSource({ cache }),
     },
   };
 
   return context;
-};
+}

@@ -62,12 +62,16 @@ export async function startGraphQLServer(
 
   await server.start();
 
+  const { cache } = server;
+
   app.use(
     SERVER_PATH,
     cors<cors.CorsRequest>(),
     json(),
     expressMiddleware(server, {
-      context: createPublyContext,
+      context: (config) => {
+        return createPublyContext(config, server.cache);
+      },
     })
   );
 
