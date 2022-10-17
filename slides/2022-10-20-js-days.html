@@ -42,18 +42,24 @@
             <b>JavaScript Days, 20. Oktober 2022</b>
           </h3>
 
-                    <div style="margin-top: 6rem">
-                      <h3><span class="transparent-bg">Slides (online)</span></h3>
-                      <p>
-                        <a class="Link" href="https://graphql.schule/jsdays2022">https://graphql.schule/jsdays2022</a>
-                      </p>
-                    </div>
-                    <div style="margin-top: 6rem">
-                      <h3><span class="transparent-bg">Workspace Installation</span></h3>
-                      <p>
-                        <a class="Link" href="https://github.com/nilshartmann/spring-graphql-training/blob/main/INSTALL.md">https://graphql.schule/jsdays-2022-install</a>
-                      </p>
-                    </div>
+          <div style="margin-top: 6rem">
+            <h3><span class="transparent-bg">Slides (online)</span></h3>
+            <p>
+              <a class="Link" href="https://graphql.schule/jsdays2022"
+                >https://graphql.schule/jsdays2022</a
+              >
+            </p>
+          </div>
+          <div style="margin-top: 6rem">
+            <h3><span class="transparent-bg">Workspace Installation</span></h3>
+            <p>
+              <a
+                class="Link"
+                href="https://github.com/nilshartmann/spring-graphql-training/blob/main/INSTALL.md"
+                >https://graphql.schule/jsdays-2022-install</a
+              >
+            </p>
+          </div>
         </section>
         <section>
           <h2>Nils Hartmann</h2>
@@ -99,19 +105,19 @@
           </div>
         </section>
 
-<!--        <section>-->
-<!--          <h2>Und ihr?</h2>-->
-<!--          <ul>-->
-<!--            <li>Stellt euch doch bitte kurz vor...</li>-->
-<!--            <li>-->
-<!--              Eure Vorkenntnisse in <b>GraphQL</b>, <b>Java</b>, <b>Spring?</b>,-->
-<!--              <b>React/TypeScript</b>-->
-<!--            </li>-->
-<!--            <li>-->
-<!--              Wünsche für diese Schulung? Besondere Themen oder Interessen?-->
-<!--            </li>-->
-<!--          </ul>-->
-<!--        </section>-->
+        <!--        <section>-->
+        <!--          <h2>Und ihr?</h2>-->
+        <!--          <ul>-->
+        <!--            <li>Stellt euch doch bitte kurz vor...</li>-->
+        <!--            <li>-->
+        <!--              Eure Vorkenntnisse in <b>GraphQL</b>, <b>Java</b>, <b>Spring?</b>,-->
+        <!--              <b>React/TypeScript</b>-->
+        <!--            </li>-->
+        <!--            <li>-->
+        <!--              Wünsche für diese Schulung? Besondere Themen oder Interessen?-->
+        <!--            </li>-->
+        <!--          </ul>-->
+        <!--        </section>-->
 
         <section data-markdown>
           <textarea data-template>
@@ -390,7 +396,6 @@ query($page: Int!, $pageSize: Int!) {
 ```
 ---
 ## Lösung mit Sortierkriterium
----
 ```graphql
 query($page: Int!, $pageSize: Int!, $sortBy: StorySortCriteria) {
   stories(page: $page,pageSize: $pageSize, sortBy: $sortBy) {
@@ -582,7 +587,7 @@ mutation($input: AddCommentInput!) {
 * GraphQL APIs müssen in einem Schema beschrieben werden.
 * In dem Schema werden Objekte (Typen) mit Feldern beschrieben.
 * Das Schema selbst ist zur Laufzeit mit einem _Introspection Query_ abfragbar
-  * 🧑‍💻 Beispiel in GraphiQL
+  * 🧑‍💻 Beispiel im Playground
 * Mit der [Schema Definition Language](https://graphql.org/learn/schema/)
 
 ---
@@ -874,28 +879,26 @@ Beschreibung eines *Objekt Types*
 ### Vorbereitung: Das Repository
 
 * `workspace`: Hier arbeiten wir, bitte in der IDE öffnen
-  * `workspace/hello-graphql-java`: Java-Projekt mit graphql-java für die Basis ohne Spring
-  * `workspace/publy-backend`: Spring Boot-Projekt, in dem wir die GraphQL API implementieren
-  * `workspace/publy-userservice`: Spring Boot-Projekt mit dem UserService
-  * `workspace/steps`: Lösungen für die einzelnen Übungen
-* Nach dem Öffnen in der IDE sollte es keine Compilier-Fehler geben.
-  * Bitte verwende mindestens *JDK 13*
-  * Zur Sicherheit einmal JUnit-Test in `hello-graphql-java` ausführen: `nh.publy.GraphQLProviderTest`
-  * Die anderen beiden Test-Klassen funktionieren *nicht*, bzw. werden "rot" beim Ausführen
+  * Ggf. `pnpm install` ausführen
+  * `pnpm dev` zum Starten ausführen
+  * Das Projekt ist in TypeScript geschrieben, sollte aber auch mit JavaScript-Syntax funktionieren.
+* `steps`: Lösungen für die einzelnen Übungen
+* `app`: Fertige Anwendung auch mit Frontend
 
 ---
 ### Übung: Schema beschreiben
 * <!-- .element: class="very-small" -->
-* Vervollständige die Datei `resources/graphql/hello-graphql-java.graphqls` und beschreibe darin eine API, die folgende Objekt-Typen enthält:
+* Vervollständige die Datei `src/graphql/schema.graphql` und beschreibe darin eine API, die folgende Objekt-Typen enthält:
   * **Member** mit `id` und `profileImage`
-  * **Story** mit `id`, `title` und `body` und einer Referenz (`writtenBy`) auf den Member
+  * **Story** mit `id`, `title`, `body`, `excerpt` und einer Referenz (`writtenBy`) auf den Member
+    * Das `excerpt`-Feld soll ein Argument haben: `maxLength` vom Typ int (Pflicht)
   * Alle Felder in den beiden Typen sind Pflicht (non-nullable), das `id`-Feld ist vom Typ `ID` alle anderen Strings
 * Lege den Query-Typen mit folgenden Feldern an:
-  * `stories`: Liefert eine Liste der `Story`-Objekte zurück. Nicht nullable.
+  * `allStories`: Liefert eine Liste der `Story`-Objekte zurück. Nicht nullable.
   * `story`: Liefert eine einzelne Story zurück. Das Feld soll ein Argument haben: `storyId`. Das Feld kann `null` zurückgeben
 * Füge für das `story`-Feld Dokumentation hinzu
-* Wenn Du das Schema korrekt beschrieben hast, sollten die Tests in derTest-Klasse `nh.publy.SchemaTest` "grün" werden
-* Eine mögliche Lösung findest Du in `hello-graphql-steps/01-schema`
+* Im Playground (http://localhost:4000/graphql) kannst Du deine API sehen und Queries formulieren, das Ausführen funktioniert natürlich noch nicht
+* Eine mögliche Lösung findest Du in `steps/01-schema`
 
 ---
 
@@ -905,90 +908,571 @@ Beschreibung eines *Objekt Types*
 
 ---
 
-### Die Beispiel-Anwendung
+### Apollo Graphql
 
-<img src="images/publy-architektur.png" />
-
----
-
-### Die Basis: graphql-java
-<!-- .slide: id="graphql-java" -->
-
-* <img style="height:350px" src="images/java-graphql-frameworks.png" />
-* [graphql-java](https://www.graphql-java.com/) ist die Basis für alle (?) Java-basierten GraphQL-Frameworks
-* Zuständig für die eigentliche Ausführung einer GraphQL Operation:
-  * Schema-Definition mit der SDL (oder per Java API)
-  * Parsen und validieren einer GraphQL Operation
-  * Optimierte Ausführung der `DataFetcher` zum Ermitteln der Daten (z.B. Parallelisierung)
-  * Aber: kein HTTP Endpunkt, keine Security etc.
-* API ist low-level (`DataFetcher`)
-* Andere GraphQL Frameworks abstrahieren davon und stellen weitere Features zur Verfügung
+* Ursprünglich Open-Source GraphQL Server und Client
+* Apollo bietet mittlerweile (kommerzielle) Services für alles rund um GraphQL an
+* Teilweise auch proprietäre Ideen, wie Federation und Supergraph
 
 ---
+### Apollo Server
 
+ * https://www.apollographql.com/docs/apollo-server/
+  * "All-inclusive"-Lösung
+  * "Standalone" Server oder als Middleware für Express
+  * Integration in andere Webserver (wie Hapi) ändern sich von Version zu Version
+  * Basiert auf der "reinen" JavaScript Referenz-Implementierung [graphql-js](https://github.com/graphql/graphql-js)
+* "Playground" zur Ausführung von Queries
+* Caching von Ergebnissen
+* Automatic persisted queries: Queries per ID ausführen
+* "Federation": Zusammenführen verschiedener GraphQL APIs
 
+---
 
 ### Verarbeitung eines GraphQL Queries (allgemein)
 
 
 1. <!-- .element: class="xx-list" --> Query kommt an (HTTP Endpunkt)
-2. Query wird geparst und validiert 
-3. Ungültige Queries werden abgewiesen (`errors`-Feld in der Antwort) 
-4. Für jedes Feld wird eine *Resolver-Funktion* (auch *DataFetcher* oder *Mapping-Funktion* genannt) aufgerufen, die verantwortlich dafür ist, die Daten für das jeweilige Feld zu liefern
+2. Query wird geparst und validiert
+3. Ungültige Queries werden abgewiesen (`errors`-Feld in der Antwort)
+4. Für jedes Feld wird eine *Resolver-Funktion* aufgerufen, die verantwortlich dafür ist, die Daten für das jeweilige Feld zu liefern
 5. Die Ergebnisse der Resolver werden validiert (insb. hinsichtlich der Typen)
 6. Das Ergebnis wird als `data`-Feld bereitsgestellt
-7. Das Ergebnis wird an den Client zurückgeschickt 
-
-<!-- .slide: class="left" -->
-* Graphql-java ist für Punkte 2-6 verantwortlich
+7. Das Ergebnis wird an den Client zurückgeschickt
 
 <!-- end of the list -->
 
-* <!-- .element: class="note" --> Unsere Aufgabe ist es, die _Resolver_ bzw. _DataFetcher_ zu implementieren
+* <!-- .element: class="note" --> Unsere Aufgabe ist es, die Resolver-Funktionen zu implementieren
+---
+
+### Apollo Server
+
+* **Konfiguration und Start** über `ApolloServer`-Objekt
+* Der Server erwartet ein *executable Schema* (Schema-Beschreibung und Resolver-Funktionen)
+* Je nach Laufzeitumgebung kann der Server standalone laufen (Express integriert) oder explizit in eine
+            vorhandene Express Instanz integriert werden
+* ```javascript
+  import { ApolloServer } from "@apollo/server";
+
+  const typeDefs = /* später */
+  const resolvers = /* später */
+
+  const schema = makeExecutableSchema({ typeDefs, resolvers });
+  const app = express();
+  const httpServer = http.createServer(app);
+  const server = new ApolloServer({
+      schema,
+  });
+
+  await server.start();
+
+  app.use("/graphql",
+      expressMiddleware(server)
+  );
+
+  httpServer.listen({ port: 4000 });
+  ```
 
 ---
 
-### DataFetcher (graphql-java)
+### Bereitstellen des Schemas
 
-* <!-- .element: class="demo" --> Demo: DataFetcher- mit Person-Feld
+* Das Schema wird grundsätzlich mit der SDL beschrieben
+* Entweder in externer Datei oder direkt im Source-Code
+* Beispiel 1: Direkt im Source Code
+  * ```javascript
+  // language=GraphQL
+    const typeDefs = `
+      type Query { ping: String! }
+    `
+  ```
+* Beispiel 2: Aus Datei lesen
+  * ```javascript
+  const typeDefs = readFileSync(
+    path.resolve(__dirname, "graphql/schema.graphql"),
+    "utf8"
+  );
+  ```
+
+
+---
+
+### Resolver
+
+* **Ein Resolver liefert den Wert für ein angefragtes Feld in einer Operation**
+* Zwingend erforderlich für jedes Root-Field (in den Query, Mutation und Subscription-Types)
+  * falls keine Resolver-Funktion hinterlegt ist für ein Feld, greift ein Default Resolver
+  * der Default-Resolber ermittel die Werte an Hand von Feldern oder Funktionen an Objekten
+* Ein Resolver kann einen Wert zurückliefern oder ein Promise für den Wert
+
+---
+
+### Beispiel: Resolver-Funktionen
+
+* <!-- .element: class="demo" --> Demo: Resolver- mit Person-Feld
 * <!-- .element: class="demo" --> Schema-Mapping! (fullname)
 * <!-- .element: class="demo" --> Argumente!
 
-* <!-- .element: class="demo" --> Workspace `hello-graphql-java` oder eigenen anlegen
-
 ---
 
-### DataFetcher (graphql-java)
-
-* Zentrales Interface in GraphQL-Java: Ermitteln die Daten für _ein_ Feld eines Queries
-  * Zum Beispiel für das Feld `Query.story` oder `Story.title`
-  * In Spring for GraphQL wird davon abstrahiert
-  * In anderen GraphQL Frameworks auch `Resolver` genannt
-* ```java
-  interface DataFetcher<T> {
-    T get(DataFetchingEnvironment environment); 
-  }  
-  ```
-* `T` ist der Typ, der von diesem DataFetcher zurückgeliefert wird
-
-* Beispiel:
-* ```java  
-  class PingDataFetcher implements DataFetcher<String> {
-
-      @Override
-      public String get(DataFetchingEnvironment env)  {
-        return "Pong";
+### Resolver-Funktionen
+* Resolver werden in der *Resolver Map* gehalten. Das ist ein JavaScript-Objekt:
+* Key darin ist der Name eins GraphQL Objekts (z.B. `Query` oder `Story`)
+* Als Wert dazu ist ein weiteres Objekt mit den Resolver-Funktionen hinterlegt:
+  * In diesem Objekt ist der Key der Name eines Feldes an dem GraphQL Typen
+  * Der Wert ist eine Funktion, die den Wert für das Feld ermittelt
+* Beispiel für einen *Root*-Resolver:
+  * ```javascript
+    const resolvers = {
+      Query: {
+        ping: () => "Hello World"
       }
+    }
+    ```
+---
+### Resolver-Funktionen
+* Signatur 1: `feldname(source, args, context, info): Wert`
+* Signatur 2: `feldname(source, args, context, info): Promise<Wert>`
+* Resolver-Funktionen können drei Argumente entgegennehmen:
+  1. Das Source- oder Parent-Objekt
+  2. Die für das Feld übergebenen Argumente
+  3. Das GraphQL Context-Objekt
+  4. Meta-Informationen über den Query
+---
+
+### Resolver-Funktionen: Argumente
+
+* Die an ein Feld übergebenen Argumente werden in einem Objekt an das _zweite_ Argument des Resolvers übergeben
+* Es werden nur Werte übergeben, die gemäß Schema gültig sind
+  * Bei nicht gültigen Werten wird der Query abgelehnt
+* ```graphql
+  type Story { id title body }
+
+  type Query {
+    story(storyId: ID): Story
   }
   ```
-* oder als Lambda:
-* ```java
-  class DataFetchers {
-    public DataFetcher<String> ping = env -> "Pong";
+* ```javascript
+  const resolvers = {
+    Query: {
+      story(_, { storyId }) {
+        return db.getStoryById(storyId);
+      },
+    }
   }
   ```
 ---
-### DataFetchingEnvironment (graphql-java)
+### Resolver-Funktionen: Das Parent-Objekt
+* Alle nicht-Root-Resolver bekommen ihr jeweiliges Parent-Objekt als ersten Parameter übergeben
+* Das Parent-Objekt ist das Objekt, das der vorherige Resolver zurückgeliefert hat
+* ```graphql
+  type Story {
+    id title body
+    excerpt(maxLength: Int! = 10)  # excerpt nicht am JavaScript Story Object!
+  }
+
+  type Query {
+    story(storyId: ID!): Story
+  }
+  ```
+* ```javascript
+  const resolvers = {
+    Query: { /* wie gesehen... */ },
+    Story: {
+      excerpt(story, { maxLength } ) {
+        return story.body.substring(0,maxLength);
+      }
+    }
+  }
+  ```
+---
+### Resolver-Funktionen: Das Context-Objekt
+* Mit dem Context-Objekt können Informationen pro Query erzeugt und an alle Resolver übergeben werden
+  * Zum Beispiel Header aus dem HTTP Request (Authorization, ...)
+* Mehr dazu später
+---
+### Resolver für Mutations
+
+* Resolver für den Mutation-Typen werden ebenfalls in die ResolverMap aufgenommen.
+* Signatur der Funktionen ebenfalls identisch
+* Einziger (semantischer) Unterschied: in den Mutation Resolvern dürfen Daten verändert werden
+* ```javascript
+  const resolvers = {
+    Query: { /* ... */ },
+
+    Mutation: {
+      addComment(_, { input }) {
+        return publyDomainService.addCommentToPost(input.storyId, input.content);
+      }
+    }
+  }
+  ```
+---
+### Resolver registrieren
+
+* Die Resolver werden an die `ApolloServer`-Instanz übergeben
+  * Entweder als `executableSchema`
+    * ```javascript
+      const resolvers = { Query: { /* ... */ } };
+      const schema = makeExecutableSchema({ typeDefs, resolvers });
+      const server = new ApolloServer({
+        schema,
+        // ...
+      })
+      ```
+  * Oder als eigene Konfigurationsoption
+    * ```javascript
+      const resolvers = { Query: { /* ... */ } };
+      const server = new ApolloServer({
+        typeDefs,
+        resolvers
+        // ...
+      })
+      ```
+---
+### Resolver modularisieren
+* Natürlich könnt ihr die Resolver auch auf unterschiedliche Module aufteilen
+* Beispiel:
+  * ```javascript
+    import { queryResolvers } from "./query.resolver"; // { story() { ... } }
+    import { storyResolvers } from "./query.resolver"; // { excerpt() { ... } }
+
+    const resolvers = {
+      Query: queryResolvers,
+      Story: storyResovers
+    }
+
+    const server = new ApolloServer({
+        typeDefs,
+        resolvers
+        // ...
+    })
+    ```
+---
+
+### Übung: Resolver implementieren
+
+* **Implementiere die Resolver für `Query.allStories`, `Query.story` und `Story.excerpt`**
+* Du musst die Änderungen in `src/graphql/resolver.ts` machen (Du brauchst keine TypeScript-Typen hinschreiben)
+* Zum Ermitteln der Story bzw. Stories kannst Du den `publyDomainService` verwenden, der aus `src/domain/PublyDomainService.ts` exportiert wird
+* Das `Story.excerpt` Feld soll die ersten `maxLength` Zeichen aus dem `body`-Feld Story zurückliefern. (Erinnerung: `maxLength` ist ein Argument am `excerpt`-GraphQL Feld)
+* Falls Du mit der Übung 1 (Schema beschreiben) nicht fertig geworden bist, kopiere dir `steps/01-schema/src/graphql/schema.graphl`
+          in dein Workspace-Verzeichnis
+* Wenn Du die drei Resolver korrekt implementiert hast, müssen die Queries auf der folgenden Slide funktionieren
+* Eine Lösung findest Du im Verzeichnis `steps/02-resolver`
+
+---
+### Übung: Resolver #2
+* Der folgende Query sollte funktionieren, wenn Du den Resolver für `allStories` korrekt implementiert hast:
+  * ```graphql
+    query {
+      allStories {
+        id title body
+        writtenBy { id profileImage }
+      }
+    }
+    ```
+
+* Der Query sollte funktionieren, wenn Du den `Query.story`-Resolver implementiert hast:
+  * ```graphql
+    query {
+      story(storyId: "1") {
+        id title body
+        writtenBy { id profileImage }
+      }
+    }
+    ```
+* Der Query sollte funktionieren, wenn Du den `Story.excerpt`-Resolver implementiert hast (die Werte für
+            das `excerpt`-Feld sollten dann natürlich max. zehn Zeichen lang sein 😉
+  * ```graphql
+    query {
+      allStories {
+        id
+        title
+        excerpt(maxLength: 10)
+      }
+    }
+    ```
+---
+### Resolver: Union-Types
+
+* Wenn ein Resolver einen Union-Typen zurückliefert, muss Apollo wissen, welchem GraphQL-Typen dein Resolver-Ergebnis entspricht
+* Beispiel Mutation:
+  * ```graphql
+    type AddStorySuccess { storyAdded: Story! }
+
+    type AddStoryFailed { error: String! }
+
+    union AddStoryResponse = AddStorySuccess | AddStoryFailed
+
+    type Mutation {
+      addStory(input: AddStoryInput!): AddStoryResponse!
+    }  
+    ```
+* Apollo muss wissen, ob das zurückgelieferte (JavaScript-)Objekt vom Resolver für `Mutation.addStory` dem GraphQL Typen `AddStorySuccess` oder `AddStoryFailed` entspricht
+* Dazu musst Du einen Resolver mit dem Namen `__resolveType` bauen und zwar für den Union-Typen (hier also `AddStoryResponse.__resolveType`)
+* Diese Funktion wird dann mit dem Ergebnis eines Resolvers aufgerufen, der den Union-Typen zurückgegeben hat (`Mutation.addStory`)
+* Die Resolver-Funktion muss dann prüfen, um welche konkrete Ausprägung des Union-Types es sich handelt und den Namen des GraphQL-Typen als String zurückliefern (`"AddStorySuccess"` oder `"AddStoryFailed"`)
+
+---
+### Resolver: Union-Types
+<!-- .slide: class="left" -->
+* Beispiel:
+* ```javascript
+  const resolvers = {
+    // ...
+    AddStoryResponse: {
+      __resolveType(addStoryResult) {
+
+        // Annahme: das addStoryResult JS-Objekt enthält
+        // ein Feld "storyAdded", wenn es ein "erfolgreiches"
+        // Ergebnis ist. 
+
+        if ("storyAdded" in addStoryResult) {
+          return "AddStorySuccess";
+        }
+        return "AddStoryFailed";
+      },
+    },
+  }
+  ```
+---
+
+---
+## Übung: Union Types und Context
+* **Implementiere die Resolver für `addComment`**
+*  Du kannst dir das Schema von der nächsten Slide kopieren und in `schema.graphql` einfügen
+*  Implementiere die fehlenden Resolver: `Mutation.addComment` 
+  * Zum Speichern des Kommentars kannst Du `publyDomainService.addComment` aufrufen. Übergib für den `userId`-Parameter im ersten Schritt einfach `U1`
+  * Wenn ein Fehler fliegt, fange diesen mit `catch` auf und gib den Fehlertypen zurück. Ansonsten gib den neuen Kommentar als `AddCommentSuccessPayload`-Typen
+    zurück
+* Implementiere außerdem den `__resolveType`-Resolver für den Union-Typen
+*  Wenn alles korrekt implementiert ist, sollte im ersten Schritt folgende Mutation funktionieren:
+   * Erfolg: ..
+   * Fehler: ---
+* Befülle den Context: in `a.ts` aus dem Express HTTP-Request das `X-Authorization`-Header auslesen (TODO: BEISPIEL)
+  * Erzeuge ein Context-Objekt mit einer `userId`-Eigenschaft. Wenn der `X-Authorization`-Header gesetzt ist,
+    setze `userId` auf diesen Wert (so dass der Header in den Resolvern zur Verfügung steht). Ist der Header nicht vorhanden
+    oder leer, setze `userId` auf `null`
+  * Registriere die `createContext`-Funktion in  `TODO....`
+* Prüfe im Mutation-Resolver von `addComment` ob eine userId im Context steht.
+  * Wenn nein: liefer den AddCommentFailedPayload-Typen mit einer Fehlermeldung zurück (z.B. "Please login")
+    * Vielleicht Exception werfen und vergleichen: https://www.apollographql.com/docs/apollo-server/data/resolvers#the-context-argument
+  * Wenn ja: verwende `userId` für den Aufruf von `publyDomainService.addComment`
+  * Nun sollte folgende Mutation funktionieren: HEADER....
+---
+### Fehlerbehandlung
+
+* Zwei Arten:
+  * Ein Feld gibt ein "fachliches" Fehler-Objekt zurück (wie gesehen, z.B. `AddStoryFailed`)
+  * Nicht behandelte (technische) Fehler werden über das `errors`-Objekt an den Client geschickt
+    * (trotzdem HTTP Status Code 200!)
+* Das `errors`-Feld ist nicht genau spezifiziert und dessen Inhalt kann auch nicht im Schema beschrieben werden
+* Deswegen sollte es nur für Ausnahmen verwendet werden, z.B. wenn der Query gar nicht ausgeführt werden kann, zum Beispiel, weil der Query ungültig ist:
+* ```json
+  {
+    "data": {},
+    "errors": [
+      {
+        "message": "Cannot query field 'cmment' on type 'AddCommentSuccessPayload'.",
+        "locations": [ { "line": 4, "column": 7 }
+        ],
+        "extensions": {
+          "code": "GRAPHQL_VALIDATION_FAILED",
+        }
+      }
+    ]
+  }
+  ```
+---
+
+### GraphQLErrors
+
+* Neben dem Fehler (`message`) und der Angabe, bei welchem Feld im Query ein Fehler (`locations`) aufgetreten ist, gibt es ein `extensions`-Feld, das von GraphQL Servern
+befüllt werden kann.
+* Apollo sendet darin einen `code` und ggf. den Stacktracke
+* Das `extensions`-Feld kannst Du selbst setzen, in dem du einen `GraphQLError` in deinem Resolver wirfst.
+  * Der `GraphQLError` erwartet im Konstruktor die Fehlermeldung und ggf. ein eigenes `extensions`-Objekt:
+  * ```javascript
+      throw new GraphQLError("Please log in", {
+        extensions: {
+          code: "INVALID_CREDENTIALS",
+          requestId: "4129374981234"
+        },
+      });
+      ```
+  * Ergebnis:      
+  * ```json
+    {
+      "errors": [
+        {
+          "message": "Please log in",
+          "locations": [ { "line": 4, "column": 7 } ],
+          "extensions": {
+            code: "INVALID_CREDENTIALS",
+            requestId: "4129374981234"
+          }
+        }
+      ]
+    }
+    ```      
+
+---
+## Der GraphQL Context
+---
+### Der GraphQL Context
+
+* Vor jeder Ausführung eines GraphQL Requests vom Client kannst Du ein Context-Objekt erzeugen
+* Das Context-Objekt ist ein reguläres JavaScript-Objekt, das Du nach deinen Anforderungen befüllen kannst
+* Das Context-Objekt wird jeder Resolver-Funktion übergebeen, die im Zuge des Requests aufgerufen wird.
+* Typische Verwendung zum Beispiel zum Übergeben des angemeldeten Benutzers oder auch Zugriff auf Daten-Quellen (z.B. DB Verbindung)
+
+---
+
+### Der GraphQL Context
+
+<!-- .element: class="demo" --> `X-Authorization` aus Request-Header lesen
+<!-- .element: class="demo" --> Im `ping`-Resolver auslesen
+
+---
+
+### Der GraphQL Context
+
+* Deine Funktion zum Erzeugen des Context-Objektes wird von Apollo vor jedem Request ausgeführt
+* Der `context`-Funktion wird ein `config`-Objekt übergeben. Wie das genau aussieht, hängt von der Server-Konfiguration und den verwendeten Plug-ins ab
+  * In der Regel hast Du aber zumindest das Express Request (`req`) und Response (`res`) Objekt darin
+* Die Funktion muss ein Promise mit deinem Context-Objekt aufrufen
+* ```javascript
+  async function createPublyContext(config) {
+    const context = {
+      userId: config.req.get("X-Authorization") || null;
+    };
+
+    return context;
+  }
+  ```
+---
+### Der GraphQL Context
+* Die Funktion kannst Du entweder direkt am `ApolloServer` oder in der `expressMiddleware` angeben:
+
+* ```javascript
+  const app = express();
+  const server = new ApolloServer({ /* ... */ });
+  // ...
+
+  app.use(
+    "/graphql",
+    cors(), json(),
+    expressMiddleware(server, { context: createPublyContext })
+  );
+  ```  
+* In unserer Beispiel-Anwendung geben wir die `context`-Funktion bei der `expressMiddleware` an, weil wir später auch den Apollo Cache benötigen, auf den wir
+  nur dort Zugriff haben. Ansonsten ginge auch:
+* ```javascript
+  const app = express();
+  const server = new ApolloServer({ 
+    // ...
+    context: createPublyContext
+  });
+  // ...
+  ```  
+---
+### Übung: GraphQL Context
+
+* Kontext mit userId erzeugen
+* Im MutationREsolver userId prüfen, falls nicht gesetzt => GraphQLError (code: NOT_LOGGED_IN)
+* Falls gesetzt, an Publy Domain Service übergeben
+---
+
+## Daten aus anderen Systemen integrieren (DataSources)
+--
+
+### DataSources
+
+* Wir können beliebige Datenquellen (DB, REST APIs, andere GraphQL APIs) in unseren Resolvern verwenden, um die benötigten Daten zu ermitteln
+* Weder die GraphQL Spezifiktatio noch Apollo machen eine Aussage/stellen eine Anforderung, wo die Daten herkommen müssen
+* Ihr könnt also einfach Eure Lieblingslibraries benutzen, die ihr ohnehin schon für den Zugriff auf Datenbank etc. benutzt
+
+* Aber es gibt ein paar Klippen!
+
+---
+
+### Zugriff auf "externe" Datenquellen ist potentiell teuer!
+
+* Wir können Felder im Schema mit der Direktive `cacheControl` markieren
+* Damit können wir steuern, wie lange ein Feld "gültig" ist
+  * Der entsprechende Resolver wird dann nicht aufgerufen, sondern der Wert wird aus dem Cache geliefert
+* Wenn mehrere Felder in einem Query abgefragt sind, die im Schema mit `cacheControl` als cachebar gekennzeichnet sind,
+entscheidet die kürzeste Cache-Dauer
+
+<!-- .element: class="demo" --> Cache-Control am ping-Feld mit Zeitstempel Datum
+<!-- .element: class="todo" -->BEISPIEL VORBEREITEN
+---
+### Laufzeitverhalten
+<!-- .slide: class="left" -->
+* Was passiert bei diesem Query?
+* ```graphql
+  query {
+    allStories {   # Story
+      writtenBy {  # Member
+        user {     # User
+          id fullname
+        }
+      }
+    }
+  }
+  ```
+* ```javascript
+  const resolvers = {
+    Query: { 
+      allStories() { return publyDomainService.findAllStories() }
+    },
+    Member: {
+      user(member) {
+        return userRestService.getUserForId(member.user_id)
+      }
+    }
+  }
+  ```
+* *1+n-Problem 😱*  
+* ```javascript
+  const resolvers = {
+    Query: { 
+      allStories() { return publyDomainService.findAllStories() } // EIN Datenbankzugriff (liefert n Stories)
+    },
+    Member: {
+      user(member) {
+        return userRestService.getUserForId(member.user_id) // n REST-Aufrufe (1x pro Story-Member)
+      }
+    }
+  }
+  ```
+---
+### Apollo RESTDataSource
+
+* `RESTDataSource` kann für den Zugriff auf externe System per REST API verwendet werden
+* Kann Antworten cachen
+* Gab bis Apollo Server v3 [weitere DataSource-Implementierungen](https://www.apollographql.com/docs/apollo-server/v3/data/data-sources), u.a. für SQL. Scheinen in v4 entfernt worden zu sein.
+<!-- .element: class="demo" --> Beispiel DataSource mit Caching am UserService
+
+
+
+---
+## TypeScript
+
+* Typen generieren
+* Typen für Resolver
+* Typen für Context
+* Typen im Client und end2end-Typisierung
+
+---
+
+
+
+### Laufzeitverhalten  
+* **Datenzugriff
+
+            ### DataFetchingEnvironment (graphql-java)
 
 * Jeder DataFetcher bekommt zur Laufzeit ein `DataFetchingEnvironment` übergeben
 * Dieses enthält unter anderem die an ein Feld übergebenen Argumente
