@@ -5,4 +5,4 @@ code/**/package.json
 .idea/
 .agenda/
 
-workspace/dist/
+dist/
