@@ -4,6 +4,7 @@ import {
   publyDomainService,
 } from "../domain/PublyDomainService";
 import { withFilter } from "graphql-subscriptions";
+import { GraphQLError } from "graphql/error";
 
 export const resolvers: Resolvers = {
   Query: {
@@ -45,7 +46,11 @@ export const resolvers: Resolvers = {
   Mutation: {
     addComment(_, { input }, { userId }) {
       if (!userId) {
-        throw new Error("Please login!");
+        throw new GraphQLError("Please log in", {
+          extensions: {
+            code: "INVALID_CREDENTIALS",
+          },
+        });
       }
       try {
         const newComment = publyDomainService.addComment(
