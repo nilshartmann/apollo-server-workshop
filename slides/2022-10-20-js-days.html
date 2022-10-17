@@ -583,19 +583,7 @@ mutation($input: AddCommentInput!) {
 * In dem Schema werden Objekte (Typen) mit Feldern beschrieben.
 * Das Schema selbst ist zur Laufzeit mit einem _Introspection Query_ abfragbar
   * 🧑‍💻 Beispiel in GraphiQL
-* Je nach Framework gibt's unterschiedliche Möglichkeiten, das Schema zu definieren
-  * **Schema-first**: erst Schema beschreiben, dann implementieren
-  * **Code-first**: Schema wird aus (Java-)Code generiert
-  * Java-Frameworks verwenden i.d.R. Schema-first (bis auf MicroProfile GraphQL)  
-
----
-
-### Beschreibung des Schemas
-
-* Mit der [Schema Definition Language](https://graphql.org/learn/schema/) 
-* Per [Java API](https://www.graphql-java.com/documentation/schema) in
-  GraphQL-Java 
-* In der Regel wird die **SDL** verwendet 
+* Mit der [Schema Definition Language](https://graphql.org/learn/schema/)
 
 ---
 
@@ -650,7 +638,7 @@ Beschreibung eines *Objekt Types*
 
 ## Skalare Typen
 
-* Skalare Typen entsprechen primitiven Typen in Java
+* Skalare Typen entsprechen primitiven Typen in JavaScript
   * Sind die Enden im Objekt-Graphen
 * Standard-Typen: ID, String, Boolean, Int, Float
   * ID wird als String gelesen und geschrieben, soll aber nicht interpretiert werden
@@ -677,7 +665,7 @@ Beschreibung eines *Objekt Types*
 
 ### Aufzählungstypen (enum)
 
-* Wie in Java
+* Wie in TypeScript
 
 * <!-- .element: style="min-width: 500px" -->
   ```graphql
@@ -720,7 +708,7 @@ Beschreibung eines *Objekt Types*
 * Felder können Argumente haben
   * Solche Felder werden auch _Methoden_ genannt
 * Die Felder mit ihren Namen und Typen müssen in der API definiert werden
-  * Namen sind entscheidend (wie "named arguments" in Kotlin), nicht Reihenfolge (wie in Java)
+  * Namen sind entscheidend (wie in Objekten an Funktionsparametern in JS), nicht Reihenfolge (wie in JavaScript)
 * Argumente können Default-Werte haben
 * Achtung! Argumente dürfen keine Objekt-Typen sein!  
 
@@ -805,7 +793,7 @@ Beschreibung eines *Objekt Types*
 ### Interfaces
 
 * Mit einem Interface wird erzwungen, dass Objekte über gleiche Felder verfügen
-  * Vergleichbar mit Interfaces in Java
+  * Vergleichbar mit Interfaces in TypeScript
 
 
 * ```graphql
