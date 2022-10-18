@@ -2,7 +2,8 @@ lockfileVersion: 5.4
 
 specifiers:
   '@apollo/datasource-rest': ^4.3.2
-  '@apollo/server': ^4.0.0
+  '@apollo/server': 4.0.1
+  '@apollo/server-plugin-response-cache': ^4.0.1
   '@apollo/utils.keyvaluecache': ^1.0.1
   '@graphql-codegen/cli': 2.13.4
   '@graphql-codegen/typescript': 2.7.3
@@ -28,7 +29,8 @@ specifiers:
 
 dependencies:
   '@apollo/datasource-rest': 4.3.2_graphql@16.6.0
-  '@apollo/server': 4.0.0_graphql@16.6.0
+  '@apollo/server': 4.0.1_graphql@16.6.0
+  '@apollo/server-plugin-response-cache': 4.0.1_6hz5bu3ckoth7zkdvoyfqzs6ji
   '@apollo/utils.keyvaluecache': 1.0.1
   '@graphql-tools/schema': 8.3.14_graphql@16.6.0
   '@types/body-parser': 1.19.2
@@ -120,9 +122,22 @@ packages:
       graphql: 16.6.0
     dev: false
 
-  /@apollo/server/4.0.0_graphql@16.6.0:
-    resolution: {integrity: sha512-PcIyjVKGkbG3k2kjn/0o/kMfJrdZYma62r/c1YOB362UQwlX0GZNL53ZmRst+wTwi0x10rEnxcCUTnyLjumT9g==}
-    engines: {node: '>=12.0'}
+  /@apollo/server-plugin-response-cache/4.0.1_6hz5bu3ckoth7zkdvoyfqzs6ji:
+    resolution: {integrity: sha512-fBDiUEVyGKT2UbDTceEXe1HQ/HmmNCiThB2X2Ht3RNPaXURTGoKFFaiMzagA3NWfqQg7o9tbRHF2AnR4ts4TeA==}
+    engines: {node: '>=14.16.0'}
+    peerDependencies:
+      '@apollo/server': ^4.0.1
+      graphql: ^16.6.0
+    dependencies:
+      '@apollo/server': 4.0.1_graphql@16.6.0
+      '@apollo/utils.createhash': 1.1.0
+      '@apollo/utils.keyvaluecache': 1.0.1
+      graphql: 16.6.0
+    dev: false
+
+  /@apollo/server/4.0.1_graphql@16.6.0:
+    resolution: {integrity: sha512-Ggwh15ukRyKHLdzRzy0138AgnD16aYC9J6tvK1GLzFn7vgHJjwCAOPuNVdni8/qRV3nbZvI0Z1ieYXYaF3lwXQ==}
+    engines: {node: '>=14.16.0'}
     peerDependencies:
       graphql: ^16.6.0
     dependencies:
