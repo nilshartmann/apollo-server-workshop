@@ -14,6 +14,7 @@ import {
 import cors from "cors";
 import { json } from "body-parser";
 import { expressMiddleware } from "@apollo/server/express4";
+import responseCachePlugin from "@apollo/server-plugin-response-cache";
 
 const SERVER_PATH = "/";
 
@@ -57,6 +58,7 @@ export async function startGraphQLServer(
           };
         },
       },
+      responseCachePlugin(),
     ],
   });
 
