@@ -1381,8 +1381,8 @@ befüllt werden kann.
 
 ### Der GraphQL Context
 
-<!-- .element: class="demo" --> `X-Authorization` aus Request-Header lesen
-<!-- .element: class="demo" --> Im `ping`-Resolver auslesen
+* <!-- .element: class="demo" --> <code>X-Authorization</code> aus Request-Header lesen
+* <!-- .element: class="demo" --> Im <code>ping</code>-Resolver auslesen
 
 ---
 
@@ -1394,8 +1394,13 @@ befüllt werden kann.
 * Die Funktion muss ein Promise mit deinem Context-Objekt aufrufen
 * ```javascript
   async function createPublyContext(config) {
+    const userIdFromHttpHeader = config.req.get("X-Authorization") || null;
+
+    // In "echter" Anwendung wäre die User-Id ein Token
+    // das wir hier vielleicht auch noch validieren würden...
+
     const context = {
-      userId: config.req.get("X-Authorization") || null;
+      userId: userIdFromHttpHeader
     };
 
     return context;
@@ -1429,19 +1434,21 @@ befüllt werden kann.
 ---
 ### Übung: GraphQL Context
 
-* Kontext mit userId erzeugen
-* Im MutationREsolver userId prüfen, falls nicht gesetzt => GraphQLError (code: NOT_LOGGED_IN)
-* Falls gesetzt, an Publy Domain Service übergeben
-* Befülle den Context: in `a.ts` aus dem Express HTTP-Request das `X-Authorization`-Header auslesen (TODO: BEISPIEL)
-  * Erzeuge ein Context-Objekt mit einer `userId`-Eigenschaft. Wenn der `X-Authorization`-Header gesetzt ist,
-    setze `userId` auf diesen Wert (so dass der Header in den Resolvern zur Verfügung steht). Ist der Header nicht vorhanden
-    oder leer, setze `userId` auf `null`
-  * Registriere die `createContext`-Funktion in  `TODO....`
-* Prüfe im Mutation-Resolver von `addComment` ob eine userId im Context steht.
-  * Wenn nein: liefer den AddCommentFailedPayload-Typen mit einer Fehlermeldung zurück (z.B. "Please login")
-    * Vielleicht Exception werfen und vergleichen: https://www.apollographql.com/docs/apollo-server/data/resolvers#the-context-argument
-  * Wenn ja: verwende `userId` für den Aufruf von `publyDomainService.addComment`
-  * Nun sollte folgende Mutation funktionieren: HEADER....
+* <!-- .element: class="very-small" -->  
+* **Verwende den GraphQL Context, um die userId an die Resolver zu übergeben. Stelle im `addComment`-Resolver sicher, dass die `userId` gesetzt ist**
+* Erzeuge in `start-graphql-server.ts` eine neue Funktion `createPublyContext`, die den Kontext erzeugt
+* Die Funktion erwartet einen Parameter (`config`), der den HTTP Request und Response enthält.
+* Die Funktion soll ein Objekt zurückliefern, das einen Eintrag enthält `userId`:
+  * Das ist entweder der Wert, der im HTTP-Header `X-Authorization` steht
+  * oder `null`, falls der Request keinen solchen Header hat.
+* Füge die Funktion als `context`-Eigenschaft dem zweiten Parameter von `expressMiddleware` hinzu
+  * `expressMiddleware(server, { context: createPublyContext }))`  
+* Im Resolver für `addComment` liest Du die `userId` aus.
+  * Wenn die userId gesetzt ist, soll diese userId für den Aufruf von `publyDomainservice.addComment` verwendet werden.
+  * Wenn keine `userId` gesetzt, einen GraphQL-Fehler erzeugen, so dass das `errors`-Objekt in der Antwort gefüllt wird (mit Fehlercode `NOT_LOGGED_IN`) 
+* Den Header kannst Du zum Testen im `Headers`-Tab im Playground setzen. Beispiel User-Id: `U3`.
+  * <img src="images/auth-header.png" style="height:200px"/>
+* Eine Lösung findest Du in `steps/04-context`  
 
 ---
 
