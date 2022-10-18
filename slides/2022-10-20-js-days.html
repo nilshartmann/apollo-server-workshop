@@ -1194,6 +1194,24 @@ Beschreibung eines *Objekt Types*
     }
     ```
 ---
+### Fehlerbehandlung
+
+* Was ist an folgender API problematisch?
+* ```graphql
+  input AddStoryInput {
+    title: String!
+    body: String!
+  }
+
+  type Mutation {
+    addStory(input: AddStoryInput!): Story!
+  }
+  ```
+* Es wird *immer* ein Story-Objekt zurückgegeben!
+* Was passiert, wenn die Story nicht angelegt werden konnte?
+
+---
+
 ### Resolver: Union-Types
 
 * Wenn ein Resolver einen Union-Typen zurückliefert, muss Apollo wissen, welchem GraphQL-Typen dein Resolver-Ergebnis entspricht
@@ -1239,27 +1257,59 @@ Beschreibung eines *Objekt Types*
 ---
 
 ---
-## Übung: Union Types und Context
-* **Implementiere die Resolver für `addComment`**
-*  Du kannst dir das Schema von der nächsten Slide kopieren und in `schema.graphql` einfügen
-*  Implementiere die fehlenden Resolver: `Mutation.addComment` 
-  * Zum Speichern des Kommentars kannst Du `publyDomainService.addComment` aufrufen. Übergib für den `userId`-Parameter im ersten Schritt einfach `U1`
-  * Wenn ein Fehler fliegt, fange diesen mit `catch` auf und gib den Fehlertypen zurück. Ansonsten gib den neuen Kommentar als `AddCommentSuccessPayload`-Typen
-    zurück
-* Implementiere außerdem den `__resolveType`-Resolver für den Union-Typen
-*  Wenn alles korrekt implementiert ist, sollte im ersten Schritt folgende Mutation funktionieren:
-   * Erfolg: ..
-   * Fehler: ---
-* Befülle den Context: in `a.ts` aus dem Express HTTP-Request das `X-Authorization`-Header auslesen (TODO: BEISPIEL)
-  * Erzeuge ein Context-Objekt mit einer `userId`-Eigenschaft. Wenn der `X-Authorization`-Header gesetzt ist,
-    setze `userId` auf diesen Wert (so dass der Header in den Resolvern zur Verfügung steht). Ist der Header nicht vorhanden
-    oder leer, setze `userId` auf `null`
-  * Registriere die `createContext`-Funktion in  `TODO....`
-* Prüfe im Mutation-Resolver von `addComment` ob eine userId im Context steht.
-  * Wenn nein: liefer den AddCommentFailedPayload-Typen mit einer Fehlermeldung zurück (z.B. "Please login")
-    * Vielleicht Exception werfen und vergleichen: https://www.apollographql.com/docs/apollo-server/data/resolvers#the-context-argument
-  * Wenn ja: verwende `userId` für den Aufruf von `publyDomainService.addComment`
-  * Nun sollte folgende Mutation funktionieren: HEADER....
+## Übung: Mutations und Union Types
+* **Implementiere die Resolver-Funktion für die `addComment`-Mutation**
+*  Bitte das erweiterte Schema aus `material/comment-schema.graphql` kopieren und ans Ende deiner `src/graphql/schema.graphql`-Datei kopieren
+*  Implementiere den fehlenden Resolver: `Mutation.addComment` in `resolver.ts`
+  * Zum Speichern des Kommentars kannst Du `publyDomainService.addComment` aufrufen. Übergib für den `userId`-Parameter im ersten Schritt einfach `U3`
+  * Wenn ein Fehler fliegt, fange diesen mit `catch` auf und gib den Fehlertypen (`AddCommentFailedPayload`) mit einer Fehlermeldung zurück. 
+  * (Du kannst zum Testen einen Fehler provozieren, in dem Du einen Kommentar anlegst, der weniger als fünf Zeichen lang ist)
+  * Im Erfolgsfall gib den neuen Kommentar als `AddCommentSuccessPayload`-Typen zurück
+* Implementiere außerdem den `__resolveType`-Resolver für den Union-Typen `AddCommentPayload`
+*  Wenn alles korrekt implementiert ist, sollten die beiden Mutations auf der folgenden Seite funktionieren.
+---
+
+### Übung: Union Types
+
+* Funktionierende Mutation (`newComment` sollte gefüllt sein):
+* ```graphql
+  mutation {
+    addComment(input: {
+      content: "Toller Artikel!",
+      storyId: "2"
+    }) {
+      ...on AddCommentFailedPayload { errorMsg }
+
+      ...on AddCommentSuccessPayload {
+        newComment {
+          id 
+          story { id }   
+          writtenBy { id }
+        }
+      }
+    }
+  }
+  ```
+* Mutation, die das `errorMsg` mit einer Fehlermeldung füllen soll:
+* ```graphql
+  mutation {
+    addComment(input: {
+      content: "Toll",
+      storyId: "2"
+    }) {
+      ...on AddCommentFailedPayload { errorMsg }
+
+      ...on AddCommentSuccessPayload {
+        newComment {
+          id 
+          story { id }
+          writtenBy { id }
+        }
+      }
+    }
+  }
+  ```
+
 ---
 ### Fehlerbehandlung
 
@@ -1382,6 +1432,17 @@ befüllt werden kann.
 * Kontext mit userId erzeugen
 * Im MutationREsolver userId prüfen, falls nicht gesetzt => GraphQLError (code: NOT_LOGGED_IN)
 * Falls gesetzt, an Publy Domain Service übergeben
+* Befülle den Context: in `a.ts` aus dem Express HTTP-Request das `X-Authorization`-Header auslesen (TODO: BEISPIEL)
+  * Erzeuge ein Context-Objekt mit einer `userId`-Eigenschaft. Wenn der `X-Authorization`-Header gesetzt ist,
+    setze `userId` auf diesen Wert (so dass der Header in den Resolvern zur Verfügung steht). Ist der Header nicht vorhanden
+    oder leer, setze `userId` auf `null`
+  * Registriere die `createContext`-Funktion in  `TODO....`
+* Prüfe im Mutation-Resolver von `addComment` ob eine userId im Context steht.
+  * Wenn nein: liefer den AddCommentFailedPayload-Typen mit einer Fehlermeldung zurück (z.B. "Please login")
+    * Vielleicht Exception werfen und vergleichen: https://www.apollographql.com/docs/apollo-server/data/resolvers#the-context-argument
+  * Wenn ja: verwende `userId` für den Aufruf von `publyDomainService.addComment`
+  * Nun sollte folgende Mutation funktionieren: HEADER....
+
 ---
 
 ## Daten aus anderen Systemen integrieren (DataSources)

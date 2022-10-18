@@ -1,0 +1,31 @@
+type Comment {
+  id: ID!
+  createdAt: String!
+
+  story: Story!
+  writtenBy: Member!
+  content: String!
+}
+
+extend type Story {
+  comments: [Comment!]!
+}
+
+input AddCommentInput {
+  storyId: ID!
+  content: String!
+}
+
+type AddCommentSuccessPayload {
+  newComment: Comment!
+}
+
+type AddCommentFailedPayload {
+  errorMsg: String!
+}
+
+union AddCommentPayload = AddCommentSuccessPayload | AddCommentFailedPayload
+
+type Mutation {
+  addComment(input: AddCommentInput!): AddCommentPayload!
+}
