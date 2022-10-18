@@ -1,6 +1,6 @@
 {
   "name": "Publy App Backend",
-  "schemaPath": "./backend/src/**/schema.graphql",
+  "schemaPath": "./backend/src/graphql/schema.graphql",
   "includes": ["./backend/src/**/*.ts"],
   "extensions": {
     "endpoints": {
