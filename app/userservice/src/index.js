@@ -43,7 +43,10 @@ app.get("/users/:userId", (req, res) => {
   if (useCaching) {
     res.set("Cache-Control", "public, max-age=10, s-maxage=10");
   }
-  return res.json({ ...user, requestId: `usersById_${usersByIdCounter}` });
+  return res.json({
+    ...user,
+    requestId: `usersById_${usersByIdCounter}_${new Date().toISOString()}`,
+  });
 });
 
 app.post("/login", (req, res) => {

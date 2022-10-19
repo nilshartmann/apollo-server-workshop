@@ -1,0 +1,15 @@
+type User {
+  id: ID!
+  fullname: String!
+  login: String!
+
+  """
+  Ein technisches Attribut, das einen Request zum remote UserService identifizierbar macht.
+  Das Attribute wird nur zur Demonstration des Caches benötigt
+  """
+  requestId: String!
+}
+
+extend type Member {
+  user: User
+}

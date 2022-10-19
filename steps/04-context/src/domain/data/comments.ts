@@ -38,7 +38,7 @@ export default function createComments(): CommentData[] {
       version: 1,
       created_at: "2021-10-10T05:53:21.912Z",
       story_id: "4",
-      written_by_id: "5",
+      written_by_id: "1",
       content: "Maiores autem adipisci.",
     },
     {
@@ -78,7 +78,7 @@ export default function createComments(): CommentData[] {
       version: 1,
       created_at: "2021-10-10T05:53:21.912Z",
       story_id: "9",
-      written_by_id: "5",
+      written_by_id: "2",
       content: "Maiores autem adipisci.",
     },
     {
@@ -117,8 +117,8 @@ export default function createComments(): CommentData[] {
       id: "14",
       version: 1,
       created_at: "2021-10-10T05:53:21.912Z",
-      story_id: "4",
-      written_by_id: "4",
+      story_id: "10",
+      written_by_id: "5",
       content: "Maiores autem adipisci.",
     },
   ];

@@ -539,7 +539,7 @@ Ein **Union-Type** kann mehr als einen Typ zurückliefern:
 
 ## Übung: Mutations
 * Führe eine Mutation aus, die einen neuen Kommentar erzeugt
-* Du musst dazu im Playground im `Headers`-Tab den Header `X-Authorization` setzen, z.B. auf `U3`
+* Du musst dazu in der Apollo Sandbox im `Headers`-Tab den Header `X-Authorization` setzen, z.B. auf `U3`
 * <img src="images/auth-header.png" height="400px" />
 * Frage aus der Antwort im Erfolgsfall die Id des neuen Kommentars, sowie dessen Story und deren Kommentare ab (in der Liste sollte dein neuer Kommentar nun enthalten sein)
 * Im Fehlerfall frage das `errorMsg`-Feld ab
@@ -897,7 +897,7 @@ Beschreibung eines *Objekt Types*
   * `allStories`: Liefert eine Liste der `Story`-Objekte zurück. Nicht nullable.
   * `story`: Liefert eine einzelne Story zurück. Das Feld soll ein Argument haben: `storyId`. Das Feld kann `null` zurückgeben
 * Füge für das `story`-Feld Dokumentation hinzu
-* Im Playground (http://localhost:4000/graphql) kannst Du deine API sehen und Queries formulieren, das Ausführen funktioniert natürlich noch nicht
+* In der "Apollo Sandbox" (http://localhost:4000/graphql) kannst Du deine API sehen und Queries formulieren, das Ausführen funktioniert natürlich noch nicht
 * Eine mögliche Lösung findest Du in `steps/01-schema`
 
 ---
@@ -912,7 +912,7 @@ Beschreibung eines *Objekt Types*
 
 * Ursprünglich Open-Source GraphQL Server und Client
 * Apollo bietet mittlerweile (kommerzielle) Services für alles rund um GraphQL an
-* Teilweise auch proprietäre Ideen, wie Federation und Supergraph
+* Vermarkten auch proprietäre Ideen, wie Federation, "GraphOS" und "Supergraph"
 
 ---
 ### Apollo Server
@@ -922,7 +922,9 @@ Beschreibung eines *Objekt Types*
   * "Standalone" Server oder als Middleware für Express
   * Integration in andere Webserver (wie Hapi) ändern sich von Version zu Version
   * Basiert auf der "reinen" JavaScript Referenz-Implementierung [graphql-js](https://github.com/graphql/graphql-js)
-* "Playground" zur Ausführung von Queries
+* [Apollo Sandbox](https://www.apollographql.com/docs/studio/explorer/sandbox/) zur Ausführung von Queries
+  * Achtung! Tracking!
+  * Prominente Open-Source-Alternative: [GraphiQL](https://github.com/graphql/graphiql)
 * Caching von Ergebnissen
 * Automatic persisted queries: Queries per ID ausführen
 * "Federation": Zusammenführen verschiedener GraphQL APIs
@@ -1446,19 +1448,19 @@ befüllt werden kann.
 * Im Resolver für `addComment` liest Du die `userId` aus.
   * Wenn die userId gesetzt ist, soll diese userId für den Aufruf von `publyDomainservice.addComment` verwendet werden.
   * Wenn keine `userId` gesetzt, einen GraphQL-Fehler erzeugen, so dass das `errors`-Objekt in der Antwort gefüllt wird (mit Fehlercode `NOT_LOGGED_IN`) 
-* Den Header kannst Du zum Testen im `Headers`-Tab im Playground setzen. Beispiel User-Id: `U3`.
+* Den Header kannst Du zum Testen im `Headers`-Tab in der Apollo Sandbox setzen. Beispiel User-Id: `U3`.
   * <img src="images/auth-header.png" style="height:200px"/>
 * Eine Lösung findest Du in `steps/04-context`  
 
 ---
 
-## Daten aus anderen Systemen integrieren (DataSources)
---
+## Daten aus anderen Systemen integrieren
+---
 
-### DataSources
+### Daten-Quellen
 
+* Weder die GraphQL Spezifikation noch Apollo machen eine Aussage/stellen eine Anforderung, wo die Daten herkommen müssen
 * Wir können beliebige Datenquellen (DB, REST APIs, andere GraphQL APIs) in unseren Resolvern verwenden, um die benötigten Daten zu ermitteln
-* Weder die GraphQL Spezifiktatio noch Apollo machen eine Aussage/stellen eine Anforderung, wo die Daten herkommen müssen
 * Ihr könnt also einfach Eure Lieblingslibraries benutzen, die ihr ohnehin schon für den Zugriff auf Datenbank etc. benutzt
 
 * Aber es gibt ein paar Klippen beim Zugriff auf externe Systeme!
@@ -1476,13 +1478,14 @@ befüllt werden kann.
 * Wenn mehrere Felder in einem Query abgefragt sind, die im Schema mit `cacheControl` als cachebar gekennzeichnet sind,
 entscheidet die kürzeste Cache-Dauer
 
-<!-- .element: class="demo" --> Cache-Control am ping-Feld mit Zeitstempel Datum
-<!-- .element: class="demo" --> HTTP Header
-<!-- .element: class="demo" --> responseCachePlugin (@apollo/server-plugin-response-cache)
+* <!-- .element: class="demo" --> Cache-Control am ping-Feld mit Zeitstempel Datum
+* <!-- .element: class="demo" --> HTTP Header
+* <!-- .element: class="demo" --> responseCachePlugin (@apollo/server-plugin-response-cache)
 
 ---
 ### Laufzeitverhalten
 <!-- .slide: class="left" -->
+* Architektur der Anwendung: User kommen aus einem Microservice 
 * Was passiert bei diesem Query?
 * ```graphql
   query {
@@ -1502,11 +1505,16 @@ entscheidet die kürzeste Cache-Dauer
     },
     Member: {
       user(member) {
+        // HTTP Request zu Microservice
         return userRestService.getUserForId(member.user_id)
       }
     }
   }
   ```
+* *1+n-Problem 😱*  
+---
+### Laufzeitverhalten
+<!-- .slide: class="left" -->
 * *1+n-Problem 😱*  
 * ```javascript
   const resolvers = {
@@ -1520,14 +1528,145 @@ entscheidet die kürzeste Cache-Dauer
     }
   }
   ```
+
 ---
 ### Apollo RESTDataSource
 
-* `RESTDataSource` kann für den Zugriff auf externe System per REST API verwendet werden
+* `RESTDataSource` kann für den Zugriff auf externe Systeme per REST API verwendet werden
 * Kann Antworten cachen
 * Gab bis Apollo Server v3 [weitere DataSource-Implementierungen](https://www.apollographql.com/docs/apollo-server/v3/data/data-sources), u.a. für SQL. Scheinen in v4 entfernt worden zu sein.
-<!-- .element: class="demo" --> Beispiel DataSource mit Caching am UserService
+* <!-- .element: class="demo" --> Beispiel: DataSource für UserService
+* <!-- .element: class="demo" --> Beispiel: Requests werden gecached
+* <!-- .element: class="demo" --> Beispiel: Caching der Ergebnisse mit HTTP Header
 
+---
+
+### RESTDataSource
+
+* Abstrakte Oberklasse im Package `@apollo/datasource-rest`
+* Property `baseURL` setzen
+* An der Klasse sind Hilfsfunktionen zum Ausführen von HTTP Requests vorhanden
+  * `this.get`, `this.post`
+* Eigene abgeleitete Klasse anlegen und mit fachlichen Funktionen ergänzen
+* ```javascript
+  import { RESTDataSource } from "@apollo/datasource-rest";
+
+  export default class UserServiceDataSource extends RESTDataSource {
+    baseURL = "http://localhost:4010/";
+
+    getUser(userId) {
+      return this.get(this.baseURL + "users/" + userId);
+    }
+  }
+  ```
+* In der Regel werden die DataSources über den Context an die Resolver übergeben
+* ```javascript
+  async function createPublyContext(cache) {
+    // ...
+    const userServiceDataSource = new UserServiceDataSource();
+
+    return {
+      userId,
+      datasources: {
+        userServiceDataSource,
+      },
+    };
+  }
+  ```
+
+---
+### RESTDataSource: Verhalten anpassen
+
+* Per Default wird der HTTP Request an die gegebenene URL gesendet
+* Tritt dabei ein Fehler auf (technisch oder HTTP !== 2xx), wird ein Fehler geworfen
+* Mit `willSendRequest` bzw. `didReceiveResponse` kann das Verhalten angepasst werden
+  * Zum Beispiel setzen von HTTP Headern vor dem Absenden
+  * Oder abweichende Fehlerbehandlung
+* ```javascript
+  export default class UserServiceDataSource extends RESTDataSource {
+    // ...
+
+    willSendRequest(opts) {
+      opts.headers['X-Authorization'] = "mytoken"
+    }
+
+    didReceiveResponse(response, _request) {
+
+      if (response.status === 404) {
+        return Promise.resolve(null);
+      }
+
+      return super.didReceiveResponse(response, _request);
+    }
+  }
+  ```  
+
+---
+### RESTDataSource: Request Caching
+
+* Die Ergebnisse eines GET-Requests werden per Default in der DataSource-Instanz gecached
+  * Requests mit identischer URL gelten als gleich, die URL wird per Default als Cache-Key verwendet
+  * Abschalten mit `memoizeGetRequests = false`
+  * Da die Instanz an den Lebenszyklus eines GraphQL Queries gebunden ist, gilt der Cache nur für einen Query
+---
+### RESTDataSource: Response Caching
+
+* Wenn der angefragte Service einen `Cache-Control` HTTP-Header zurückliefert, wird das Ergebnis ebenfalls gecacht
+  * So lange, bis es gemäß des Headers gültig ist
+* Dazu muss der Cache der Apollo Server-Instanz verwendet werden
+  * Dieser ist dann auch Query-übergreifend (und auch Client-übergreifend) gültig
+  * Es gibt mehrere Implementierungen, per Default In-Memory (LRU)
+* Die verwendete Cache-Instanz kann über die laufende Server-Instanz abgefragt werden (`server.cache`) und an
+  den Konstruktor der DataSource übergeben werden
+* ```javascript
+  const server = new ApolloServer({ /* ... */ });
+  //...
+
+  await server.start();
+  // ...
+
+  const userServiceDataSource = new UserServiceDataSource(
+    {cache}
+  ));
+  ```
+
+---
+### Übung: RESTDataSource
+
+* **Implementiere eine RESTDataSource, die die User aus unserem remote UserService liest**
+* Vorbereitung: Starte den UserService (`pnpm start` in `app/userservice`)
+* Schritt 1: Lege die Klasse `UserServiceDataSource` an
+  * Die URL zum Abfragen eines Users lautet: http://localhost:4010/users/USERID
+  * Die Klasse soll eine Methode bekommen, mit der ein User an Hand seiner ID abgefragt werden kann.
+  * Erweiter die `createPublyContext`-Funktion, erzeuge dort eine Instanz der UserServiceDataSource.
+  * Füge die Instanz dem GraphQL Context hinzu.
+* Schritt 2: Implementiere den Resolver für `Member.user`
+  * Das erweiterte Schema findest Du in `material/member-schema.graphql`. Kopiere es an dein bestehendes Schema.
+  * In `resolvers` implementiere den Resolver für `Member.user`
+  * Das Parent-Objekt `member` hat ein Feld `userId`. Mit diesem Wert musst du deine UserServiceDataSource aufrufen.
+* Der Query auf der folgenden Seite sollte dann funktionieren und einen User zurückliefern.
+
+---
+### Übung: RESTDataSource
+
+* Wenn die UserServiceDataSource korrekt funktioniert, sollte dieser Query funktionieren:
+* ```graphql
+  query {
+    story(storyId: "1") {
+      title
+      writtenBy {
+        user { id fullname login }
+      }
+  
+      comments {
+        writtenBy {
+          user { id fullname login }
+        }
+      }
+    }
+  }
+  ```
+* Sowohl der `user` in der Story als auch die User in den Kommentaren sollten zurückgeliefert werden.  
 
 
 ---

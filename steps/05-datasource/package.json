@@ -1,0 +1,47 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "packageManager": "pnpm@7.9.5",
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "start": "ts-node src/index.ts",
+    "build": "pnpm prettier:check && tsc",
+    "codegen": "graphql-codegen --config codegen.yml && prettier --write src/graphql/generated/**",
+    "codegen:watch": "graphql-codegen --config codegen.yml --watch src/**/*.graphql",
+    "prettier:check": "prettier --check src"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@graphql-codegen/cli": "2.13.4",
+    "@graphql-codegen/typescript": "2.7.3",
+    "@graphql-codegen/typescript-resolvers": "2.7.3",
+    "@types/node": "18.8.2",
+    "@types/ws": "^8.5.3",
+    "cross-env": "7.0.3",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.7.1",
+    "ts-node": "10.9.1",
+    "typescript": "4.8.4"
+  },
+  "dependencies": {
+    "@apollo/datasource-rest": "^4.3.2",
+    "@apollo/server": "4.0.1",
+    "@apollo/server-plugin-response-cache": "^4.0.1",
+    "@apollo/utils.keyvaluecache": "^1.0.1",
+    "@graphql-tools/schema": "8.3",
+    "@types/body-parser": "^1.19.2",
+    "@types/cors": "^2.8.12",
+    "@types/express": "4.17.14",
+    "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
+    "express": "4.18.1",
+    "graphql": "^16.6.0",
+    "graphql-subscriptions": "^2.0.0",
+    "graphql-ws": "^5.11.2",
+    "ws": "^8.9.0"
+  }
+}

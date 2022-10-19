@@ -48,6 +48,11 @@ export type AddCommentSuccessPayload = {
   newComment: Comment;
 };
 
+export enum CacheControlScope {
+  Private = "PRIVATE",
+  Public = "PUBLIC",
+}
+
 export type Comment = {
   __typename?: "Comment";
   content: Scalars["String"];
@@ -302,6 +307,7 @@ export type ResolversTypes = {
     >
   >;
   Boolean: ResolverTypeWrapper<Partial<Scalars["Boolean"]>>;
+  CacheControlScope: ResolverTypeWrapper<Partial<CacheControlScope>>;
   Comment: ResolverTypeWrapper<
     Partial<
       Omit<Comment, "story" | "writtenBy"> & {
@@ -379,6 +385,19 @@ export type ResolversParentTypes = {
   Subscription: {};
   User: UserEntity;
 };
+
+export type CacheControlDirectiveArgs = {
+  inheritMaxAge?: Maybe<Scalars["Boolean"]>;
+  maxAge?: Maybe<Scalars["Int"]>;
+  scope?: Maybe<CacheControlScope>;
+};
+
+export type CacheControlDirectiveResolver<
+  Result,
+  Parent,
+  ContextType = PublyContext,
+  Args = CacheControlDirectiveArgs
+> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type AddCommentFailedPayloadResolvers<
   ContextType = PublyContext,
@@ -567,4 +586,8 @@ export type Resolvers<ContextType = PublyContext> = {
   StoryList?: StoryListResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+};
+
+export type DirectiveResolvers<ContextType = PublyContext> = {
+  cacheControl?: CacheControlDirectiveResolver<any, any, ContextType>;
 };
