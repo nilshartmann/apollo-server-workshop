@@ -18,6 +18,22 @@ jobs:
       - run: pnpm install
       - run: pnpm build
 
+  build-app-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app/frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: corepack enable
+      - run: pnpm install
+      - run: pnpm build
+
   build-workspace-steps:
     runs-on: ubuntu-latest
     strategy:
