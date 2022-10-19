@@ -40,17 +40,17 @@ jobs:
       matrix:
         step:
           - 'workspace'
-          - '00-initial'
-          - '01-schema'
-          - '02-resolver'
-          - '03-mutation-union-types'
-          - '04-context'
-          - '05-datasource'
-          - '06-tests'
+          - 'steps/00-initial'
+          - 'steps/01-schema'
+          - 'steps/02-resolver'
+          - 'steps/03-mutation-union-types'
+          - 'steps/04-context'
+          - 'steps/05-datasource'
+          - 'steps/06-tests'
       fail-fast: false
     defaults:
       run:
-        working-directory: steps/${{ matrix.step }}
+        working-directory: ${{ matrix.step }}
 
     steps:
       - name: Checkout
