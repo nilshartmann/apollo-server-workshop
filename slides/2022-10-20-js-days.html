@@ -139,11 +139,13 @@
 
 * Teil 2: [GraphQL APIs bereitstellen](#/graphql-apis-bereitstellen)
   * [Das Schema Definieren](#/schema)
-  * [Die Basis: graphql-java](#/graphql-java)
-  * [Exkurs: Einführung in Spring und Spring Boot](#/exkurs-spring)
-  * [GraphQL APIs mit Spring for GraphQL](#/spring-for-graphql)
-
-* Teil 3: [GraphQL Clients mit React und Apollo](#/t-apollo-react)
+  * [Implementieren der API](#/api-implementieren)
+    * [Resolver-Funktionen](#/resolver-funktionen)
+    * [Fehlerbehandlung](#/fehlerbehandlung)
+    * [Der GraphQL Context](#/graphql-context)
+    * [Externe Services integrieren](#/externe-systeme-integrieren)
+    * [Testen](#/testen)
+    * [TypeScript](#/typescript)
 
 ---
 
@@ -999,7 +1001,9 @@ Beschreibung eines *Objekt Types*
 
 ---
 
-### Resolver
+### Resolver-Funktionen
+<!-- .slide: id="resolver-funktionen" -->
+
 
 * **Ein Resolver liefert den Wert für ein angefragtes Feld in einer Operation**
 * Zwingend erforderlich für jedes Root-Field (in den Query, Mutation und Subscription-Types)
@@ -1197,6 +1201,7 @@ Beschreibung eines *Objekt Types*
     ```
 ---
 ### Fehlerbehandlung
+<!-- .slide: id="fehlerbehandlung" -->
 
 * Was ist an folgender API problematisch?
 * ```graphql
@@ -1389,6 +1394,8 @@ befüllt werden kann.
 ---
 
 ### Der GraphQL Context
+<!-- .slide: id="graphql-context" -->
+
 
 * Deine Funktion zum Erzeugen des Context-Objektes wird von Apollo vor jedem Request ausgeführt
 * Der `context`-Funktion wird ein `config`-Objekt übergeben. Wie das genau aussieht, hängt von der Server-Konfiguration und den verwendeten Plug-ins ab
@@ -1455,6 +1462,7 @@ befüllt werden kann.
 ---
 
 ## Daten aus anderen Systemen integrieren
+<!-- .slide: id="externe-systeme-integrieren" -->
 ---
 
 ### Daten-Quellen
@@ -1670,7 +1678,129 @@ entscheidet die kürzeste Cache-Dauer
 
 
 ---
+## Testen
+<!-- .slide: id="testen" -->
+
+---
+
+### Optionen
+
+* Resolver direkt testen (Unit-Test?)
+* Integration-Tests (GraphQL Queries ausführen)
+* End2End-Tests (GraphQL Queries per HTTP ausführen)
+
+---
+### Beispiel Resolver Test
+<!-- .slide: class="left" -->
+* Mit Jest Testframework
+* ```javascript
+  it("ping resolver should work", () => {
+    expect(resolvers.Query.ping({}, {}, {}, {})).toBe("hello");
+  });
+  ```
+
+---
+### Beispiel Integrationtest
+
+* Der ApolloServer wird dabei mit den regulären Resolvern und dem echten Schema (oder Teilen davon) erzeugt
+* Mit `executeOperation` am `ApolloServer` kann direkt ein Query ausgeführt werden
+* Die Funktion liefert ein `GraphQLResponse` Objekt zurück
+* Dieses Objekt hat ein `body`-Property:
+  * das ist entweder ein einfaches Ergebnis (Normalfall)
+  * oder ein "incremental" Result (z.B. für Queries mit `@defer`). Das ist noch experimentell.
+* ```javascript
+  const typeDefs = /* ... */;
+  const resolvers = /* ... */;
+
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
+
+  it("ping should return hello", async () => {
+
+    const result = await server.executeOperation({
+      query:"query { ping }"
+    });
+
+    expect(result.body.singleResult.data?.ping).toBe(
+      "hello"
+    );
+  });
+  ```
+---
+### Tipp für JetBrains IDEs
+
+* Wenn ihr IntelliJ oder Webstorm verwendet...
+* ...könnt ihr das [GraphQL Plugin](https://plugins.jetbrains.com/plugin/8097-graphql) installieren
+* dann könnt ihr im Source-Code mit `// language=GraphQL` markieren, wenn die nächste Zeile GraphQL Code enthält
+* dann bekommt ihr Syntax Highlighting und bei Konfiguration des Schemas auch Code Completion
+* ```javascript
+  it("should return single story by id", async () => {
+    const result = await server.executeOperation({
+
+      // language=GraphQL
+      query: "query GetStory($storyId: ID!) { story(storyId: $storyId) { title } }",
+    });
+  });
+  ```
+---
+### Beispiel Integrationtest
+
+* Neben dem `query` können beim Ausführen auch Variablen übergeben
+* Dazu das `variables`-Property verwenden
+* ```javascript
+  const server = /* ... */;
+
+  it("should return single story by id", async () => {
+    const result = await server.executeOperation({
+
+      query:
+        "query GetStory($storyId: ID!) { story(storyId: $storyId) { title } }",
+
+      variables: 
+        { storyId: "1" },
+    });
+
+    expect(result.body.singleResult.data?.story.title).toBe(
+      "Authentication and Access Control with Relay"
+    );
+  });
+  ```
+---
+### Beispiel Integrationtest: Context
+
+* Die `executeOperation`-Funktion kann zwei Argumente entgegen nehmen:
+  * `request` (wie gesehen Objekt mit `query` und evtl. `variables`)
+  * `options`
+* Über `options.contextValue` kann ein Context-Objekt für einen Request gesetzt werden  
+  * Je mehr Informationen in den Resolvern über das Context-Objekt abgefragt werden, desto einfacher das Mocken an dieser Stelle...
+
+* ```javascript
+  it("should add new comment with user id from context", async () => {
+    const result = await server.executeOperation({
+        query: `mutation {
+          addComment(input: { storyId: "3", content: "New Comment!"})	{
+            ...on AddCommentSuccessPayload {
+                newComment { id }
+            }
+          }
+        }`
+      },
+      {
+        contextValue: { userId: "U3" },
+      }
+    );
+
+    expect(result.body.singleResult.errors).toBeFalsy();
+    expect(result.body.singleResult.data?.addComment.newComment.id).toBe("15");
+  });
+  ```
+
+
+---
 ## TypeScript
+<!-- .slide: id="typescript" -->
 
 * Typen generieren
 * Typen für Resolver
