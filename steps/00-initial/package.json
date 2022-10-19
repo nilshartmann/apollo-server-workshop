@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "packageManager": "pnpm@7.9.5",
   "scripts": {
     "dev": "nodemon src/index.ts",
     "start": "ts-node src/index.ts",
-    "build": "tsc",
+    "build": "pnpm codegen && pnpm prettier:check && tsc",
     "codegen": "graphql-codegen --config codegen.yml && prettier --write src/graphql/generated/**",
     "codegen:watch": "graphql-codegen --config codegen.yml --watch src/**/*.graphql",
     "prettier:check": "prettier --check src"

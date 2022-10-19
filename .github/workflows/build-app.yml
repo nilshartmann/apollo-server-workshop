@@ -17,3 +17,29 @@ jobs:
       - run: corepack enable
       - run: pnpm install
       - run: pnpm build
+
+  build-workspace-steps:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        step:
+          - '00-initial'
+          - '01-schema'
+          - '02-resolver'
+          - '03-mutation-union-types'
+          - '04-context'
+      fail-fast: false
+    defaults:
+      run:
+        working-directory: ./steps/{{ matrix.step }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: corepack enable
+      - run: pnpm install
+      - run: pnpm build
