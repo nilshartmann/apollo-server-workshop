@@ -1,7 +1,7 @@
 {
   "name": "Publy WORKSPACE Backend",
-  "schemaPath": "./src/graphql/schema.graphql",
-  "includes": ["./**/*.ts"],
+  "schemaPath": "./backend/src/**/schema.graphql",
+  "includes": ["./**/*.graphql"],
   "extensions": {
     "endpoints": {
       "Publy Workspace Backend": {
