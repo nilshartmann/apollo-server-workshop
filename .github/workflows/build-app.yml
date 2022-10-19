@@ -31,7 +31,7 @@ jobs:
       fail-fast: false
     defaults:
       run:
-        working-directory: ./steps/{{ matrix.step }}
+        working-directory: steps/${{ matrix.step }}
 
     steps:
       - name: Checkout
