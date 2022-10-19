@@ -1797,7 +1797,19 @@ entscheidet die kürzeste Cache-Dauer
   });
   ```
 
+---
+### Übung: Tests
 
+* **Schreibe ein oder zwei einfache Tests für Queries**
+* Die Datei `src/graphql/publy-api.test.ts` ist bereits vorbereitet
+* Du musst dort den `ApolloServer` erzeugen und `typeDefs` und `resolvers` übergeben
+* Schreibe dann ein oder zwei Tests um (einfache) Queries zu testen
+* Du kannst die Tests mit `pnpm test` oder `pnpm test --watch` ausführen
+* Hinweis: 
+  * Da das eine TypeScript-Datei ist, werden eigentlichen Typen erwartet. Der einfachheithalber markiere `result` einfach als `any`
+    * `const result: any = await server....`
+  * Um Fehler zu sehen, am besten das Ergebnis mit `JSON.stringify(result)` auf der Konsole ausgeben
+* Lösung in `steps/06-tests`
 ---
 ## TypeScript
 <!-- .slide: id="typescript" -->

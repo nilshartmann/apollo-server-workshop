@@ -45,6 +45,7 @@ jobs:
           - '03-mutation-union-types'
           - '04-context'
           - '05-datasource'
+          - '06-tests'
       fail-fast: false
     defaults:
       run:
