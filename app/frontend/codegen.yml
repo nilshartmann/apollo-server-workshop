@@ -1,6 +1,6 @@
 overwrite: true
 schema:
-  - "../workspace/src/graphql/schema.graphql"
+  - "../backend/src/graphql/schema.graphql"
 documents: "./src/**/{*.graphql,*.tsx}"
 generates:
   src/generated/graphql.tsx:

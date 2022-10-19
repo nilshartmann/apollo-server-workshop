@@ -40,6 +40,11 @@ export type AddCommentSuccessPayload = {
   newComment: Comment;
 };
 
+export enum CacheControlScope {
+  Private = "PRIVATE",
+  Public = "PUBLIC",
+}
+
 export type Comment = {
   __typename?: "Comment";
   content: Scalars["String"];
@@ -55,6 +60,7 @@ export type Member = {
   bio?: Maybe<Scalars["String"]>;
   id: Scalars["ID"];
   profileImage: Scalars["String"];
+  skills?: Maybe<Scalars["String"]>;
   stories: Array<Story>;
   user?: Maybe<User>;
 };
@@ -92,10 +98,7 @@ export type Query = {
   me?: Maybe<Member>;
   /** Returns `hello` if backend is working */
   ping: Scalars["String"];
-  /**
-   * Returns the requested amount of stories, ordered by date, so
-   * that newest/latest stories come first
-   */
+  /** Returns the requested amount of stories */
   stories: StoryList;
   /** Returns the given `Story` or null if this Story is not available */
   story?: Maybe<Story>;
@@ -108,11 +111,17 @@ export type QueryCommentsArgs = {
 export type QueryStoriesArgs = {
   page?: Scalars["Int"];
   pageSize?: Scalars["Int"];
+  sortBy?: InputMaybe<StorySortCriteria>;
 };
 
 export type QueryStoryArgs = {
   storyId: Scalars["ID"];
 };
+
+export enum SortDirection {
+  Asc = "asc",
+  Desc = "desc",
+}
 
 /** This is a `Story`. */
 export type Story = {
@@ -140,6 +149,16 @@ export type StoryList = {
   page: PageResult;
   stories: Array<Story>;
 };
+
+export type StorySortCriteria = {
+  direction: SortDirection;
+  field: StorySortField;
+};
+
+export enum StorySortField {
+  Date = "date",
+  Title = "title",
+}
 
 export type Subscription = {
   __typename?: "Subscription";
