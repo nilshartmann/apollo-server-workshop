@@ -42,7 +42,7 @@
             <b>JavaScript Days, 20. Oktober 2022</b>
           </h3>
 
-          <div style="margin-top: 6rem">
+          <div style="margin-top: 4rem">
             <h3><span class="transparent-bg">Slides (online)</span></h3>
             <p>
               <a class="Link" href="https://graphql.schule/jsdays2022"
@@ -50,13 +50,13 @@
               >
             </p>
           </div>
-          <div style="margin-top: 6rem">
-            <h3><span class="transparent-bg">Workspace Installation</span></h3>
+          <div style="margin-top: 4rem">
+            <h3><span class="transparent-bg">Repository</span></h3>
             <p>
               <a
                 class="Link"
-                href="https://github.com/nilshartmann/spring-graphql-training/blob/main/INSTALL.md"
-                >https://graphql.schule/jsdays-2022-install</a
+                href="https://github.com/nilshartmann/apollo-server-workshop.git"
+                >https://github.com/nilshartmann/apollo-server-workshop.git</a
               >
             </p>
           </div>
@@ -125,8 +125,6 @@
 ## Kurze Vorstellung
 
 * Mentimeter Umfrage:
-  * Was ist Eure bisherige GraphQL Erfahrung?
-  * Was verwendet ihr normalerweise an Technologie?
   * Link im Chat
 
 ---
@@ -216,11 +214,11 @@ _"GraphQL is a query language for APIs and a runtime for fulfilling those querie
 
 ---
 
-## Beispiel: GraphiQL
+## Beispiel: Sandbox
 
-<img style="border: 1px solid grey" src="images/screenshot-graphiql.png" />
+* Apollo GraphQL Browser
 
-[http://localhost:8080](http://localhost:8080)
+[http://localhost:4000](http://localhost:4000)
 
 ---
 
@@ -230,7 +228,7 @@ _"GraphQL is a query language for APIs and a runtime for fulfilling those querie
 * <!-- .element: class="demo" --> IntelliJ IDEA
   * <!-- .element: class="demo" --> graphql-Extension (hello.graphql)
   * <!-- .element: class="demo" --> GraphQL.md im publy-Verzeichnis
-  * <!-- .element: class="demo" --> language=GraphQL in einer leeren Java-Datei
+  * <!-- .element: class="demo" --> language=GraphQL in einer TypeScript-Datei
 
 * <!-- .element: class="demo" --> TypeScript (optional)
   * <!-- .element: class="demo" --> publy-frontend, npm run codegen:watch
@@ -1814,12 +1812,47 @@ entscheidet die kürzeste Cache-Dauer
 ## TypeScript
 <!-- .slide: id="typescript" -->
 
-* Typen generieren
-* Typen für Resolver
-* Typen für Context
-* Typen im Client und end2end-Typisierung
+* <!-- .element: class="demo" --> Typen generieren
+* <!-- .element: class="demo" --> Resolver typisieren
 
 ---
+### TypeScript
+* Du kannst deine Resolver-Funktionen, den Context und einiges andere mit TypeScript Typen beschreiben
+* Da viele Typ-Informationen schon im GraphQL-Schema vorhanden sind, kannst Du viele TypeScript Typen generieren lassen
+* Dazu kannst Du den [graphql code generator](https://www.the-guild.dev/graphql/codegen) verwenden
+* Der generiert dir dann unter anderem die Typen für deine Resolver
+  * Achtung! Da die Verwendung der Resolver sehr flexibel ist, macht der Generator einige Kompromisse
+  * Also nicht 100%ig darauf verlassen
+* Den generierten Typen kannst Du beim erzeugen des resolvers-Objektes angeben:
+  * ```javascript
+    import { Resolvers } from "./generated/graphql-types";
+
+    export const resolvers: Resolvers = {
+      Query: /* ... */
+    }
+    ```
+
+---
+### TypeScript: Context
+
+* Auch für deinen Context kannst Du einen TypeScript-Typen erzeugen
+* Diesen musst Du von Hand schreiben
+* Den Typ gibst Du beim Erzeugen des `ApolloServer`-Objektes an
+* ```typescript
+  type PublyContext = {
+    userId: string | null,
+    dataSources: { userDataSource: UserDataSource }
+  };
+
+  const server = new ApolloServer<PublyContext>({
+    schema: /* ... */
+  });
+  ```
+* Das `context`-Argument von den Resolvern ist dann korrekt typisiert
+
+---
+### TypeScript Beispiel
+* Ein Beispiel der Publy-Anwendung mit TypeScript-Typen findest Du in `app/backend`
 
 
   </textarea
