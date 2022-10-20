@@ -191,18 +191,6 @@ _"GraphQL is a query language for APIs and a **runtime for fulfilling** those qu
 
 _"GraphQL is a query language for APIs and a runtime for fulfilling those queries with **your existing data**"_ ([https://graphql.org](https://graphql.org))
 
----
-
-## Spezifikation
-
-* https://spec.graphql.org/
-* Umfasst:
-  * Query Sprache und -Ausführung
-  * Schema Definition Language
-* Kein fertiges Produkt, keine fertige Bibliothek
-   * Es gibt Bibliotheken, die dir helfen, GraphQL APIs zu implementieren und bereitzustellen
-   * Die abgefragten Daten müssen wir selbst ermitteln
-   * GraphQL macht keine Aussage darüber, wo diese Daten herkommen (Datenbank, Micro-Service, Berechnung ...)
 
 ---
 
@@ -233,6 +221,20 @@ _"GraphQL is a query language for APIs and a runtime for fulfilling those querie
 * <!-- .element: class="demo" --> TypeScript (optional)
   * <!-- .element: class="demo" --> publy-frontend, npm run codegen:watch
   * <!-- .element: class="demo" --> StoryPage.query.graphql zeigen und story-Feld entfernen
+
+---
+
+## Spezifikation
+
+* https://spec.graphql.org/
+* Umfasst:
+  * Query Sprache und -Ausführung
+  * Schema Definition Language
+* Kein fertiges Produkt, keine fertige Bibliothek
+    * Es gibt Bibliotheken, die dir helfen, GraphQL APIs zu implementieren und bereitzustellen
+    * Die abgefragten Daten müssen wir selbst ermitteln
+    * GraphQL macht keine Aussage darüber, wo diese Daten herkommen (Datenbank, Micro-Service, Berechnung ...)
+  
 ---
 
 <!-- .slide: id="graphql-sprache" -->
@@ -345,7 +347,12 @@ Der Operation-Type bestimmt auch den Einstiegspunkt in den Objekt-Graphen
     }
   }
   ```
-
+* JSON mit Variablen:  
+* ```json
+  {
+    storyId: "1"
+  }
+  ```
 ---
 
 ## Übung: Einen Query ausführen
@@ -359,6 +366,7 @@ _Mach' dich mit der GraphQL-Abfragesprache vertraut_
 * Bau eine Fragment (`Author`), das aus dem `Member` dessen Id, sowie `fullname` und `id` des Users enthält
   * Verwende das Fragment, um in den Stories und den Kommentaren jeweils die Member-Informationen abzufragen
   * In den Stories zusätzlich noch `skills` des Members abfragen
+* Die Argumente für die Felder kannst Du direkt in deinen Query schreiben oder per Variable übergeben  
 * Du kannst Code-Completion und den `Docs`-Explorer (rechts oben) verwenden, um die API zu untersuchen
 * Mögliche Lösungen findest Du auf den folgenden Slides.
 
@@ -878,12 +886,13 @@ Beschreibung eines *Objekt Types*
 
 ### Vorbereitung: Das Repository
 
+* Repository klonen: `git clone https://github.com/nilshartmann/apollo-server-workshop.git`
 * `workspace`: Hier arbeiten wir, bitte in der IDE öffnen
-  * Ggf. `pnpm install` ausführen
-  * `pnpm dev` zum Starten ausführen
-  * Das Projekt ist in TypeScript geschrieben, sollte aber auch mit JavaScript-Syntax funktionieren.
+* Darin `pnpm install` ausführen
+  * `pnpm` könnt ihr mit `corepacks enable` einschalten oder es [manuell installieren](https://pnpm.io/installation)
+* Dann `pnpm dev` zum Starten ausführen
+* Das Projekt ist in TypeScript geschrieben, sollte aber auch mit JavaScript-Syntax funktionieren.
 * `steps`: Lösungen für die einzelnen Übungen
-* `app`: Fertige Anwendung auch mit Frontend
 
 ---
 ### Übung: Schema beschreiben
